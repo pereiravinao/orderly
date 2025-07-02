@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  db_auth-service:
+    image: postgres:15
+    container_name: db_auth_service
+    environment:
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: db_auth_service
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_auth_service_data:/var/lib/postgresql/data
+    networks:
+      - minha-rede-compartilhada
+
+  auth-service:
+    build:
+      context: ../..                # <-- Contexto é a raiz do monorepo
+      dockerfile: apps/auth-service/Dockerfile
+      args:
+        SERVICE_PATH: apps/auth-service
+    container_name: auth_service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db_auth-service:5432/db_auth_service
+      SPRING_DATASOURCE_USERNAME: postgres_user
+      SPRING_DATASOURCE_PASSWORD: postgres_password
+    depends_on:
+      - db_auth-service
+    networks:
+      - minha-rede-compartilhada
+
+volumes:
+  db_auth_service_data:
+    driver: local
+
+networks:
+  minha-rede-compartilhada:
+    driver: bridge
