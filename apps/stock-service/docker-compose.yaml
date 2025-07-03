@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  db_stock-service:
+    image: postgres:15
+    container_name: db_stock_service
+    environment:
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: db_stock_service
+    ports:
+      - "5435:5432"
+    volumes:
+      - db_stock_service_data:/var/lib/postgresql/data
+    networks:
+      - minha-rede-compartilhada
+
+  stock-service:
+    build:
+      context: ../..
+      dockerfile: apps/stock-service/Dockerfile
+      args:
+        SERVICE_PATH: apps/stock-service
+    container_name: stock_service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db_stock-service:5433/db_stock_service
+      SPRING_DATASOURCE_USERNAME: postgres_user
+      SPRING_DATASOURCE_PASSWORD: postgres_password
+    depends_on:
+      - db_stock-service
+    networks:
+      - minha-rede-compartilhada
+
+volumes:
+  db_stock_service_data:
+    driver: local
+
+networks:
+  minha-rede-compartilhada:
+    driver: bridge

@@ -1,6 +1,8 @@
 package challange.tech.exceptions;
 
 import challange.tech.exceptions.auth.AuthExceptionHandler;
+import challange.tech.exceptions.product.ProductExceptionHandler;
+import challange.tech.exceptions.stock.product.StockExceptionHandler;
 import challange.tech.exceptions.user.UserExceptionHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(ex.getStatus())
                 .body(getErrorResponse(ex.getStatus(), ex.getMessage()));
     }
+
+    @ExceptionHandler(ProductExceptionHandler.class)
+    public ResponseEntity<Map<String, Object>> handleUserException(ProductExceptionHandler ex) {
+        return ResponseEntity.status(ex.getStatus())
+                .body(getErrorResponse(ex.getStatus(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(StockExceptionHandler.class)
+    public ResponseEntity<Map<String, Object>> handleUserException(StockExceptionHandler ex) {
+        return ResponseEntity.status(ex.getStatus())
+                .body(getErrorResponse(ex.getStatus(), ex.getMessage()));
+    }
+
 
     private Map<String, Object> getErrorResponse(HttpStatus status, String message) {
         Map<String, Object> errorResponse = new HashMap<>();

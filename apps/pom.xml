@@ -17,6 +17,7 @@
         <module>user-service</module>
         <module>auth-service</module>
         <module>product-service</module>
+        <module>stock-service</module>
     </modules>
 
     <properties>
