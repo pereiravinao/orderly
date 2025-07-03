@@ -1,7 +1,7 @@
 package challange.tech.gateway.database;
 
 import challange.tech.domain.Stock;
-import challange.tech.exceptions.stock.product.StockExceptionHandler;
+import challange.tech.exceptions.stock.StockExceptionHandler;
 import challange.tech.gateway.database.jpa.entity.StockEntity;
 import challange.tech.gateway.database.jpa.repository.StockRepository;
 import lombok.RequiredArgsConstructor;

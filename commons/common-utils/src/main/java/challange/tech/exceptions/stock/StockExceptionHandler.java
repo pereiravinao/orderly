@@ -1,4 +1,4 @@
-package challange.tech.exceptions.stock.product;
+package challange.tech.exceptions.stock;
 
 
 import lombok.Getter;
