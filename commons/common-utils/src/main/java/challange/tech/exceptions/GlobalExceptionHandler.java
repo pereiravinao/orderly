@@ -1,6 +1,7 @@
 package challange.tech.exceptions;
 
 import challange.tech.exceptions.auth.AuthExceptionHandler;
+import challange.tech.exceptions.user.UserExceptionHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +26,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AuthExceptionHandler.class)
     public ResponseEntity<Map<String, Object>> handleAuthException(AuthExceptionHandler ex) {
+        return ResponseEntity.status(ex.getStatus())
+                .body(getErrorResponse(ex.getStatus(), ex.getMessage(), ex.getStackTrace().toString()));
+    }
+
+    @ExceptionHandler(UserExceptionHandler.class)
+    public ResponseEntity<Map<String, Object>> handleUserException(UserExceptionHandler ex) {
         return ResponseEntity.status(ex.getStatus())
                 .body(getErrorResponse(ex.getStatus(), ex.getMessage(), ex.getStackTrace().toString()));
     }

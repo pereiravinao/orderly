@@ -3,12 +3,15 @@ package challange.tech.usecase;
 import challange.tech.domain.UserAuth;
 import challange.tech.dto.UserAuthDTO;
 import challange.tech.dto.parameter.LoginParameter;
+import challange.tech.enums.UserRole;
 import challange.tech.exceptions.auth.AuthExceptionHandler;
 import challange.tech.gateway.database.jpa.UserAuthJpaGateway;
 import challange.tech.services.JwtTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,9 +39,7 @@ public class LoginUseCase {
                 .id(userAuth.getId())
                 .email(userAuth.getEmail())
                 .cpf(userAuth.getCpf())
-                .createdAt(userAuth.getCreatedAt())
-                .token(userAuth.getToken())
+                .roles(userAuth.getRoles().stream().map(UserRole::getRole).collect(Collectors.toSet()))
                 .build();
     }
-    
 }

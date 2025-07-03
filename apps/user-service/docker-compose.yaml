@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  db_user-service:
+    image: postgres:15
+    container_name: db_user_service
+    environment:
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: db_user_service
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_user_service_data:/var/lib/postgresql/data
+    networks:
+      - minha-rede-compartilhada
+
+  user-service:
+    build:
+      context: ../..                # <-- Contexto é a raiz do monorepo
+      dockerfile: apps/user-service/Dockerfile
+      args:
+        SERVICE_PATH: apps/user-service
+    container_name: user_service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db_user-service:5433/db_user_service
+      SPRING_DATASOURCE_USERNAME: postgres_user
+      SPRING_DATASOURCE_PASSWORD: postgres_password
+    depends_on:
+      - db_user-service
+    networks:
+      - minha-rede-compartilhada
+
+volumes:
+  db_user_service_data:
+    driver: local
+
+networks:
+  minha-rede-compartilhada:
+    driver: bridge

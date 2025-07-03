@@ -1,5 +1,8 @@
 package challange.tech.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum UserRole {
     ROLE_ADMIN("Administrator"),
     ROLE_MANAGER("Gerente"),
@@ -13,7 +16,4 @@ public enum UserRole {
         this.role = role;
     }
 
-    public String getRole() {
-        return role;
-    }
 }
