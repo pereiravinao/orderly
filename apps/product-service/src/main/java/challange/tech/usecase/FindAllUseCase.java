@@ -1,7 +1,6 @@
 package challange.tech.usecase;
 
 import challange.tech.domain.Product;
-import challange.tech.domain.User;
 import challange.tech.gateway.database.ProductJpaGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
