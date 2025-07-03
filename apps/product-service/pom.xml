@@ -4,26 +4,30 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>challenge.tech</groupId>
-        <artifactId>commons</artifactId>
+        <groupId>challange.tech</groupId>
+        <artifactId>apps</artifactId>
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>common-utils</artifactId>
+    <artifactId>product-service</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <dependencies>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
+            <groupId>challenge.tech</groupId>
+            <artifactId>common-auth</artifactId>
+            <version>1.0.0</version>
         </dependency>
+
         <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
+            <groupId>challenge.tech</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

@@ -44,7 +44,7 @@ class UserAuthJpaGatewayTest {
                 .email("user@email.com")
                 .cpf("12345678901")
                 .password("senha123")
-                .roles(Set.of(UserRole.ROLE_USER))
+                .roles(Set.of(UserRole.USER))
                 .build();
         userAuthEntity = new UserAuthEntity(userAuth);
     }

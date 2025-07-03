@@ -30,7 +30,7 @@ public class RegisterUserParameter {
                 .email(email)
                 .password(password)
                 .cpf(cpf)
-                .roles(Set.of(UserRole.ROLE_USER))
+                .roles(Set.of(UserRole.USER))
                 .build();
     }
 }

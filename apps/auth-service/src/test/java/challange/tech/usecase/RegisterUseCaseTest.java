@@ -62,7 +62,7 @@ class RegisterUseCaseTest {
 
         assertNotNull(result);
         assertEquals("encodedPassword", result.getPassword());
-        assertTrue(result.getRoles().contains(UserRole.ROLE_USER));
+        assertTrue(result.getRoles().contains(UserRole.USER));
         assertEquals("token123", result.getToken());
     }
 

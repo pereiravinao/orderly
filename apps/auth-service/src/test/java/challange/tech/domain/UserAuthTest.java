@@ -1,5 +1,6 @@
 package challange.tech.domain;
 
+import challange.tech.enums.UserRole;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +22,7 @@ class UserAuthTest {
                 .password("password123")
                 .cpf("12345678901")
                 .createdAt(LocalDateTime.now())
-                .roles(Set.of(challange.tech.enums.UserRole.ROLE_USER))
+                .roles(Set.of(UserRole.USER))
                 .token("token123")
                 .build();
     }
@@ -64,7 +65,7 @@ class UserAuthTest {
     @Test
     @DisplayName("Deve retornar as roles corretamente")
     void getRoles_shouldReturnRoles() {
-        assertTrue(userAuth.getRoles().contains(challange.tech.enums.UserRole.ROLE_USER));
+        assertTrue(userAuth.getRoles().contains(challange.tech.enums.UserRole.USER));
     }
 
     @Test
@@ -82,7 +83,7 @@ class UserAuthTest {
                 .password("builderPass")
                 .cpf("98765432100")
                 .createdAt(LocalDateTime.of(2023, 1, 1, 12, 0))
-                .roles(Set.of(challange.tech.enums.UserRole.ROLE_ADMIN))
+                .roles(Set.of(UserRole.ADMIN))
                 .token("builderToken")
                 .build();
 
@@ -91,7 +92,7 @@ class UserAuthTest {
         assertEquals("builderPass", user.getPassword());
         assertEquals("98765432100", user.getCpf());
         assertEquals(LocalDateTime.of(2023, 1, 1, 12, 0), user.getCreatedAt());
-        assertTrue(user.getRoles().contains(challange.tech.enums.UserRole.ROLE_ADMIN));
+        assertTrue(user.getRoles().contains(UserRole.ADMIN));
         assertEquals("builderToken", user.getToken());
     }
 }

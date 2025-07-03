@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  db_product-service:
+    image: postgres:15
+    container_name: db_product_service
+    environment:
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: db_product_service
+    ports:
+      - "5434:5432"
+    volumes:
+      - db_product_service_data:/var/lib/postgresql/data
+    networks:
+      - minha-rede-compartilhada
+
+  product-service:
+    build:
+      context: ../..
+      dockerfile: apps/product-service/Dockerfile
+      args:
+        SERVICE_PATH: apps/product-service
+    container_name: product_service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db_product-service:5433/db_product_service
+      SPRING_DATASOURCE_USERNAME: postgres_user
+      SPRING_DATASOURCE_PASSWORD: postgres_password
+    depends_on:
+      - db_product-service
+    networks:
+      - minha-rede-compartilhada
+
+volumes:
+  db_product_service_data:
+    driver: local
+
+networks:
+  minha-rede-compartilhada:
+    driver: bridge

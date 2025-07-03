@@ -20,7 +20,7 @@ public class UserAuth {
     private String email;
     private String cpf;
     private LocalDateTime createdAt;
-    private Set<UserRole> roles = Set.of(UserRole.ROLE_USER);
+    private Set<UserRole> roles = Set.of(UserRole.USER);
 
     private String password;
     private String token;

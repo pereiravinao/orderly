@@ -19,7 +19,7 @@ class RegisterUserParameterTest {
         assertEquals("user@email.com", domain.getEmail());
         assertEquals("senha123", domain.getPassword());
         assertEquals("12345678901", domain.getCpf());
-        assertEquals(Set.of(UserRole.ROLE_USER), domain.getRoles());
+        assertEquals(Set.of(UserRole.USER), domain.getRoles());
     }
 
     @Test
