@@ -22,6 +22,7 @@
         <module>common-auth</module>
         <module>common-utils</module>
         <module>common-feign</module>
+        <module>common-queue</module>
     </modules>
 
     <dependencies>

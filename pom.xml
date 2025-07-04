@@ -32,6 +32,7 @@
     <modules>
         <module>apps</module>
         <module>commons</module>
+        <module>apps/order-receiver-producer</module>
     </modules>
 
     <!-- Gerenciamento de dependências -->
@@ -57,7 +58,7 @@
             <!-- Shared Utils -->
             <dependency>
                 <groupId>challenge.tech</groupId>
-                <artifactId>shared-utils</artifactId>
+                <artifactId>common-queue</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

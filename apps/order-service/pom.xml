@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>challange.tech</groupId>
+        <groupId>challenge.tech</groupId>
         <artifactId>apps</artifactId>
         <version>1.0.0</version>
     </parent>
@@ -35,6 +35,7 @@
             <artifactId>common-feign</artifactId>
             <version>1.0.0</version>
         </dependency>
+
     </dependencies>
 
 </project>
