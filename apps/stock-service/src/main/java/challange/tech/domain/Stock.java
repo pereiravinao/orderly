@@ -20,4 +20,9 @@ public class Stock {
             this.quantity = stock.getQuantity();
         }
     }
+
+    public Stock plusQuantity(Integer quantity) {
+        this.quantity += quantity;
+        return this;
+    }
 }

@@ -1,11 +1,12 @@
 package challange.tech.controller;
 
 import challange.tech.domain.Stock;
-import challange.tech.dto.paremeter.CreateStockParameter;
+import challange.tech.dto.parameter.CreateStockParameter;
+import challange.tech.dto.parameter.UpdateStockParameter;
 import challange.tech.usecase.CreateUseCase;
 import challange.tech.usecase.DeleteUseCase;
 import challange.tech.usecase.FindAllUseCase;
-import challange.tech.usecase.FindByIdUseCase;
+import challange.tech.usecase.FindByProductsIdUseCase;
 import challange.tech.usecase.UpdateUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StockController {
 
     private final FindAllUseCase findAllUseCase;
-    private final FindByIdUseCase findByIdUseCase;
+    private final FindByProductsIdUseCase findByProductsIdUseCase;
     private final CreateUseCase createUseCase;
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
@@ -41,9 +42,9 @@ public class StockController {
         return new ResponseEntity<>(stocks, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Stock> findById(@PathVariable Long id) {
-        var stock = findByIdUseCase.execute(id);
+    @GetMapping("/products/{productId}")
+    public ResponseEntity<Stock> findByProductsId(@PathVariable Long productId) {
+        var stock = findByProductsIdUseCase.execute(productId);
         return new ResponseEntity<>(stock, HttpStatus.OK);
     }
 
@@ -55,9 +56,9 @@ public class StockController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Stock> update(@PathVariable Long id, @RequestBody Stock parameter) {
-        var stock = updateUseCase.execute(id, parameter);
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ROLE_INTERNAL_SERVICE')")
+    public ResponseEntity<Stock> update(@PathVariable Long id, @RequestBody UpdateStockParameter parameter) {
+        var stock = updateUseCase.execute(id, parameter.getProductId(), parameter.getQuantity());
         return new ResponseEntity<>(stock, HttpStatus.OK);
     }
 
@@ -68,3 +69,4 @@ public class StockController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
+

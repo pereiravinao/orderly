@@ -1,4 +1,4 @@
-package challange.tech.dto.paremeter;
+package challange.tech.dto.parameter;
 
 import challange.tech.domain.Stock;
 import jakarta.validation.constraints.NotNull;

@@ -18,4 +18,8 @@ public class StockExceptionHandler extends RuntimeException {
         return new StockExceptionHandler("Estoque não encontrado.", HttpStatus.NOT_FOUND);
     }
 
+    public static StockExceptionHandler insufficientStock() {
+        return new StockExceptionHandler("Estoque insuficiente.", HttpStatus.BAD_REQUEST);
+    }
+
 }
