@@ -21,6 +21,7 @@
     <modules>
         <module>common-auth</module>
         <module>common-utils</module>
+        <module>common-feign</module>
     </modules>
 
     <dependencies>

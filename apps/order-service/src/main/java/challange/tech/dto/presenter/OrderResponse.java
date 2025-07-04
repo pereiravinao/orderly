@@ -1,7 +1,7 @@
-package challange.tech.domain;
+package challange.tech.dto.presenter;
 
-import challange.tech.domain.orderItem.OrderItem;
 import challange.tech.enums.OrderStatus;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,13 +11,13 @@ import java.util.List;
 
 @Getter
 @Setter
-public class Order {
+@AllArgsConstructor
+public class OrderResponse {
     private Long id;
-    private List<OrderItem> products;
     private Long userId;
     private Long paymentId;
     private OrderStatus status;
     private BigDecimal total;
     private LocalDateTime createdAt;
-
+    private List<ProductOrderDetails> products;
 }

@@ -17,6 +17,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserAuth {
     private Long id;
+    private String name;
+    private String phone;
     private String email;
     private String cpf;
     private LocalDateTime createdAt;

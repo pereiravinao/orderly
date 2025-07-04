@@ -7,21 +7,22 @@ import challange.tech.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class CreateUserUseCase {
     private final UserJpaGateway userJpaGateway;
 
     public User execute(User user) {
-        var currentUser = SecurityUtils.getCurrentUser();
-
-        if (userJpaGateway.existsByEmailOrCpf(currentUser.getEmail(), currentUser.getCpf())) {
+        if (userJpaGateway.existsByEmailOrCpf(user.getEmail(), user.getCpf())) {
             throw UserExceptionHandler.userAlreadyExists();
         }
 
-        user.setCpf(currentUser.getCpf());
-        user.setEmail(currentUser.getEmail());
-        user.setAuthId(currentUser.getId());
+        if (Objects.isNull(user.getAuthId())) {
+            var currentUser = SecurityUtils.getCurrentUser();
+            user.setAuthId(currentUser.getId());
+        }
 
         return userJpaGateway.save(user);
     }

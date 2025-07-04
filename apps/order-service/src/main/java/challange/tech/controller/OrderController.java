@@ -2,6 +2,7 @@ package challange.tech.controller;
 
 import challange.tech.domain.Order;
 import challange.tech.dto.paremeter.CreateOrderParameter;
+import challange.tech.dto.presenter.OrderResponse;
 import challange.tech.usecase.CreateUseCase;
 import challange.tech.usecase.DeleteUseCase;
 import challange.tech.usecase.FindAllUseCase;
@@ -46,7 +47,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> create(@Valid @RequestBody CreateOrderParameter parameter) {
+    public ResponseEntity<OrderResponse> create(@Valid @RequestBody CreateOrderParameter parameter) {
         var stock = createUseCase.execute(parameter.toDomain());
         return new ResponseEntity<>(stock, HttpStatus.CREATED);
     }

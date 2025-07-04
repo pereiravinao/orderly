@@ -13,6 +13,12 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 public class RegisterUserParameter {
+    @NotEmpty(message = "Nome é obrigatório")
+    private String name;
+
+    @NotEmpty(message = "Telefone é obrigatório")
+    private String phone;
+
     @NotEmpty(message = "E-mail é obrigatório")
     @Email(message = "E-mail inválido")
     private String email;
@@ -27,6 +33,8 @@ public class RegisterUserParameter {
 
     public UserAuth toDomain() {
         return UserAuth.builder()
+                .name(name)
+                .phone(phone)
                 .email(email)
                 .password(password)
                 .cpf(cpf)

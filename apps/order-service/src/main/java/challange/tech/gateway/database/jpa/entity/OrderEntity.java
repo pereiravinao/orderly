@@ -2,6 +2,7 @@ package challange.tech.gateway.database.jpa.entity;
 
 
 import challange.tech.domain.Order;
+import challange.tech.domain.orderItem.OrderItem;
 import challange.tech.enums.OrderStatus;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
@@ -35,7 +36,7 @@ public class OrderEntity {
 
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb")
-    private List<Map<String, Integer>> products;
+    private List<OrderItem> products;
 
     private Long paymentId;
     private Long userId;

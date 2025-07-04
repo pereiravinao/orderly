@@ -1,6 +1,7 @@
 package challange.tech.config;
 
 
+import challange.tech.filter.InternalServiceAuthFilter;
 import challange.tech.filter.SecurityFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final SecurityFilter securityFilter;
+    private final InternalServiceAuthFilter internalServiceAuthFilter;
 
     @Value("${application.security.permit-urls}")
     private String[] permitUrls;
@@ -33,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers(permitUrls).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(internalServiceAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
