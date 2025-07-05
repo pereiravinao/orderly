@@ -43,14 +43,13 @@ public class OrderResponse {
         return order;
     }
 
-    public OrderResponse(Order order, List<ProductOrderDetails> productDetails) {
+    public OrderResponse(Order order) {
         this.id = order.getId();
         this.status = order.getStatus();
         this.createdAt = order.getCreatedAt();
         this.total = order.getTotal();
         this.paymentId = order.getPaymentId();
         this.userId = order.getUserId();
-        this.products = productDetails;
     }
 
 }

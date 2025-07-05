@@ -48,7 +48,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderResponse> create(@Valid @RequestBody CreateOrderParameter parameter) {
         var stock = createUseCase.execute(parameter.toDomain());
-        return new ResponseEntity<>(stock, HttpStatus.CREATED);
+        return new ResponseEntity<>(new OrderResponse(stock), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
