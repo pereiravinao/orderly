@@ -14,10 +14,13 @@ public class FeignAuthRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
-        final var request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        final var authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (Objects.nonNull(authorization)) {
-            template.header(HttpHeaders.AUTHORIZATION, authorization);
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            final var request = attributes.getRequest();
+            final var authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+            if (Objects.nonNull(authorization)) {
+                template.header(HttpHeaders.AUTHORIZATION, authorization);
+            }
         }
     }
 }

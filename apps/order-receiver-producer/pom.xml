@@ -5,11 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>challenge.tech</groupId>
-        <artifactId>apps</artifactId>
+        <artifactId>orderly</artifactId>
         <version>1.0.0</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>order-service</artifactId>
+    <artifactId>order-receiver-producer</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -19,21 +20,26 @@
 
     <dependencies>
         <dependency>
-            <groupId>challenge.tech</groupId>
-            <artifactId>common-auth</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <!-- Lombok -->
         <dependency>
-            <groupId>challenge.tech</groupId>
-            <artifactId>common-utils</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
 
+        <!-- Test Dependencies -->
         <dependency>
-            <groupId>challenge.tech</groupId>
-            <artifactId>common-feign</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -41,7 +47,11 @@
             <artifactId>common-queue</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>challenge.tech</groupId>
+            <artifactId>common-auth</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
     </dependencies>
-
 </project>

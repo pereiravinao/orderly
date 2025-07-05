@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"   # AMQP protocol
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - minha-rede-compartilhada
+
+  order-receiver-service:
+    build:
+      context: ../..
+      dockerfile: /Dockerfile
+      args:
+        SERVICE_PATH: apps/order-receiver-service
+    container_name: order_receiver_service
+    ports:
+      - "8086:8086"
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+    depends_on:
+      - rabbitmq
+    networks:
+      - minha-rede-compartilhada
+
+volumes:
+  db_order-receiver_service_data:
+    driver: local
+
+networks:
+  minha-rede-compartilhada:
+    driver: bridge

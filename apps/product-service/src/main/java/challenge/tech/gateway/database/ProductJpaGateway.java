@@ -41,5 +41,11 @@ public class ProductJpaGateway {
         return productRepository.existsBySKU(SKU);
     }
 
+    public Product findBySku(String sku) {
+        return productRepository.findBySKU(sku)
+                .map(ProductEntity::toDomain)
+                .orElseThrow(ProductExceptionHandler::productNotFound);
+    }
+
 }
 

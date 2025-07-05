@@ -9,7 +9,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>order-service</artifactId>
+    <artifactId>payment-service</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -18,30 +18,22 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>challenge.tech</groupId>
             <artifactId>common-auth</artifactId>
             <version>1.0.0</version>
         </dependency>
-
-        <dependency>
-            <groupId>challenge.tech</groupId>
-            <artifactId>common-utils</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
         <dependency>
             <groupId>challenge.tech</groupId>
             <artifactId>common-feign</artifactId>
             <version>1.0.0</version>
         </dependency>
-
         <dependency>
             <groupId>challenge.tech</groupId>
-            <artifactId>common-queue</artifactId>
+            <artifactId>common-utils</artifactId>
             <version>1.0.0</version>
         </dependency>
-
     </dependencies>
 
 </project>

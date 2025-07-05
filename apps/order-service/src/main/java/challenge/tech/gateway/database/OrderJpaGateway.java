@@ -25,8 +25,8 @@ public class OrderJpaGateway {
                 .orElseThrow(StockExceptionHandler::notFound);
     }
 
-    public Order save(Order stock) {
-        return orderRepository.save(new OrderEntity(stock)).toDomain();
+    public Order save(Order order) {
+        return orderRepository.save(new OrderEntity(order)).toDomain();
     }
 
     public void deleteById(Long id) {

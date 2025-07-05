@@ -6,6 +6,7 @@ import challenge.tech.usecase.CreateUseCase;
 import challenge.tech.usecase.DeleteUseCase;
 import challenge.tech.usecase.FindAllUseCase;
 import challenge.tech.usecase.FindByIdUseCase;
+import challenge.tech.usecase.FindBySkuUseCase;
 import challenge.tech.usecase.UpdateUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class ProductController {
 
     private final FindAllUseCase findAllUseCase;
     private final FindByIdUseCase findByIdUseCase;
+    private final FindBySkuUseCase findBySkuUseCase;
     private final CreateUseCase createUseCase;
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
@@ -44,6 +46,12 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<Product> findById(@PathVariable Long id) {
         var product = findByIdUseCase.execute(id);
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+    @GetMapping("/sku/{sku}")
+    public ResponseEntity<Product> findBySku(@PathVariable String sku) {
+        var product = findBySkuUseCase.execute(sku);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
