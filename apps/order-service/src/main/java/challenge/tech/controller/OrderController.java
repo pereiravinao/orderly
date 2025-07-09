@@ -7,6 +7,7 @@ import challenge.tech.usecase.CreateUseCase;
 import challenge.tech.usecase.DeleteUseCase;
 import challenge.tech.usecase.FindAllUseCase;
 import challenge.tech.usecase.FindByIdUseCase;
+import challenge.tech.usecase.UpdatePaymentUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +34,7 @@ public class OrderController {
     private final FindByIdUseCase findByIdUseCase;
     private final CreateUseCase createUseCase;
     private final DeleteUseCase deleteUseCase;
+    private final UpdatePaymentUseCase updatePaymentUseCase;
 
     @GetMapping
     public ResponseEntity<Page<Order>> findAllUsers(@PageableDefault Pageable pageable) {
@@ -49,6 +52,12 @@ public class OrderController {
     public ResponseEntity<OrderResponse> create(@Valid @RequestBody CreateOrderParameter parameter) {
         var stock = createUseCase.execute(parameter.toDomain());
         return new ResponseEntity<>(new OrderResponse(stock), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/payments/{transactionId}")
+    public ResponseEntity<Void> updatePayment(@RequestBody UpdateOrderParameter parameter, @PathVariable Long transactionId) {
+        updatePaymentUseCase.execute(parameter);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")

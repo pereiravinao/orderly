@@ -14,6 +14,6 @@ public class Payment {
     private String transactionId;
     private BigDecimal amount;
     private String cardNumber;
-    private String status;
+    private PaymentStatus status;
     private LocalDateTime createdAt;
 }

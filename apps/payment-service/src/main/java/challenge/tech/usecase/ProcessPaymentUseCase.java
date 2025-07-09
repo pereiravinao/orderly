@@ -3,6 +3,7 @@ package challenge.tech.usecase;
 import challenge.tech.domain.Payment;
 import challenge.tech.gateway.database.PaymentJpaGateway;
 import challenge.tech.gateway.payment.PaymentGateway;
+import challenge.tech.gateway.payment.impl.WebhookSimulator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ public class ProcessPaymentUseCase {
 
     private final PaymentJpaGateway paymentJpaGateway;
     private final PaymentGateway paymentGateway;
+    private final WebhookSimulator webhookSimulator;
 
     public Payment execute(Payment request) {
 
@@ -19,7 +21,11 @@ public class ProcessPaymentUseCase {
 
         request.setTransactionId(paymentProcessed.getTransactionId());
         request.setStatus(paymentProcessed.getStatus());
-        return paymentJpaGateway.save(request);
+        var payment = paymentJpaGateway.save(request);
+
+        webhookSimulator.simulateWebhook(payment.getTransactionId(), payment.getOrderId());
+
+        return payment;
 
     }
 }

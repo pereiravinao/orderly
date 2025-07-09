@@ -1,7 +1,10 @@
 package challenge.tech.gateway.database.jpa.entity;
 
 import challenge.tech.domain.Payment;
+import challenge.tech.domain.PaymentStatus;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,7 +31,9 @@ public class PaymentEntity {
     private BigDecimal amount;
     private String cardNumber;
 
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
     private LocalDateTime createdAt;
 
     public PaymentEntity(Payment payment) {
@@ -59,7 +64,7 @@ public class PaymentEntity {
             createdAt = LocalDateTime.now();
         }
         if (status == null) {
-            status = "PENDING";
+            status = PaymentStatus.PENDING;
         }
     }
 }

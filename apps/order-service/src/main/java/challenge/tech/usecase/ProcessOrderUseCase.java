@@ -49,13 +49,6 @@ public class ProcessOrderUseCase {
         PaymentResponse paymentResponse = createPayment(savedOrder, orderReceiverDTO.getPayment().getCardNumber());
         savedOrder.setPaymentId(paymentResponse.getId());
 
-        if ("FAILED".equals(paymentResponse.getStatus())) {
-            incrementStock(savedOrder);
-            savedOrder.setStatus(OrderStatus.FECHADO_SEM_CREDITO);
-        } else {
-            savedOrder.setStatus(OrderStatus.FECHADO_COM_SUCESSO);
-        }
-
         createUseCase.execute(savedOrder);
     }
 

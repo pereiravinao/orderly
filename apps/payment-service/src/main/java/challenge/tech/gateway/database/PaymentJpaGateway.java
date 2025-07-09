@@ -15,4 +15,8 @@ public class PaymentJpaGateway {
     public Payment save(Payment paymentParameter) {
         return paymentRepository.save(new PaymentEntity(paymentParameter)).toDomain();
     }
+
+    public Payment findByTransactionId(String transactionId) {
+        return paymentRepository.findByTransactionId(transactionId).map(PaymentEntity::toDomain).orElse(null);
+    }
 }

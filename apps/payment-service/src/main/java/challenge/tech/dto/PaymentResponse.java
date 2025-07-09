@@ -18,7 +18,7 @@ public class PaymentResponse {
     public PaymentResponse(Payment payment) {
         this.id = payment.getId();
         this.transactionId = payment.getTransactionId();
-        this.status = payment.getStatus();
+        this.status = payment.getStatus().name();
 
     }
 }
