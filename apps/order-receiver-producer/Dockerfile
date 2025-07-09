@@ -4,7 +4,7 @@ FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /build
 RUN apk add --no-cache maven
 # Copia tudo do monorepo para dentro da imagem (exceto .dockerignore)
-COPY ../order-receiver-service .
+COPY ../order-receiver-producer .
 
 # Ajuste aqui para o serviço correto, substitua o caminho do pom se necessário
 ARG SERVICE_PATH=apps/order-receiver-producer

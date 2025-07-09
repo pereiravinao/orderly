@@ -12,7 +12,7 @@ services:
     networks:
       - minha-rede-compartilhada
 
-  order-receiver-service:
+  order-receiver-producer:
     image: vpereira007/order-receiver-producer:latest
     container_name: order_receiver_producer
     ports:
