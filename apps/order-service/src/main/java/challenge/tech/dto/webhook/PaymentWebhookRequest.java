@@ -1,6 +1,6 @@
 package challenge.tech.dto.webhook;
 
-import challenge.tech.enums.OrderStatus;
+import challenge.tech.enums.PaymentStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,5 +9,5 @@ import lombok.Setter;
 public class PaymentWebhookRequest {
     private Long orderId;
     private String transactionId;
-    private OrderStatus status;
+    private PaymentStatus status;
 }

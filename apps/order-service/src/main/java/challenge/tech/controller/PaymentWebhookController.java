@@ -1,6 +1,8 @@
 package challenge.tech.controller;
 
 import challenge.tech.dto.webhook.PaymentWebhookRequest;
+import challenge.tech.enums.OrderStatus;
+import challenge.tech.enums.PaymentStatus;
 import challenge.tech.usecase.UpdateOrderStatusFromWebhookUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,4 +24,5 @@ public class PaymentWebhookController {
         updateOrderStatusFromWebhookUseCase.execute(request.getOrderId(), request.getStatus());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

@@ -26,7 +26,7 @@ public class PaymentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String orderId;
+    private Long orderId;
     private String transactionId;
     private BigDecimal amount;
     private String cardNumber;

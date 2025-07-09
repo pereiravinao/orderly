@@ -54,12 +54,6 @@ public class OrderController {
         return new ResponseEntity<>(new OrderResponse(stock), HttpStatus.CREATED);
     }
 
-    @PutMapping("/payments/{transactionId}")
-    public ResponseEntity<Void> updatePayment(@RequestBody UpdateOrderParameter parameter, @PathVariable Long transactionId) {
-        updatePaymentUseCase.execute(parameter);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

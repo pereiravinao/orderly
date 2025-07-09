@@ -25,7 +25,7 @@ public class WebhookSimulator {
             webhookRequest.setOrderId(orderId);
             webhookRequest.setStatus(new Random().nextBoolean() ? PaymentStatus.SUCCESS : PaymentStatus.FAILED);
 
-            restTemplate.postForEntity("http://localhost:8080/api/v1/orders/webhook", webhookRequest, Void.class);
+            restTemplate.postForEntity("http://localhost:8084/api/v1/orders/webhook", webhookRequest, Void.class);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

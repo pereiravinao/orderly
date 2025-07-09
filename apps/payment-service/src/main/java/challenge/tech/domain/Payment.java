@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 public class Payment {
     private Long id;
-    private String orderId;
+    private Long orderId;
     private String transactionId;
     private BigDecimal amount;
     private String cardNumber;
