@@ -13,12 +13,8 @@ services:
       - minha-rede-compartilhada
 
   order-receiver-service:
-    build:
-      context: ../..
-      dockerfile: /Dockerfile
-      args:
-        SERVICE_PATH: apps/order-receiver-service
-    container_name: order_receiver_service
+    image: vpereira007/order-receiver-producer:latest
+    container_name: order_receiver_producer
     ports:
       - "8086:8086"
     environment:

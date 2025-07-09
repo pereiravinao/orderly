@@ -7,7 +7,7 @@ RUN apk add --no-cache maven
 COPY ../order-receiver-service .
 
 # Ajuste aqui para o serviço correto, substitua o caminho do pom se necessário
-ARG SERVICE_PATH=apps/order-reciever-service
+ARG SERVICE_PATH=apps/order-receiver-producer
 
 # Faz o build só desse serviço e suas dependências
 RUN mvn clean install -DskipTests -pl ${SERVICE_PATH} -am
@@ -16,7 +16,7 @@ RUN mvn clean install -DskipTests -pl ${SERVICE_PATH} -am
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-ARG SERVICE_PATH=apps/order-reciever-service
+ARG SERVICE_PATH=apps/order-receiver-producer
 
 # Copia o JAR buildado para o container final
 COPY --from=builder /build/${SERVICE_PATH}/target/*.jar app.jar
