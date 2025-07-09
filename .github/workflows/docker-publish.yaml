@@ -39,3 +39,4 @@ jobs:
           IMAGE_NAME=vpereira007/${{ matrix.service }}
           docker build -t $IMAGE_NAME:latest $SERVICE_PATH
           docker push $IMAGE_NAME:latest
+
