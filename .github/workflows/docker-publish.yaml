@@ -1,0 +1,41 @@
+name: Docker Image CI
+
+on: 
+  push:
+    branches:
+      - main
+
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - auth-service
+          - order-receiver-producer
+          - order-service
+          - payment-service
+          - product-service
+          - stock-service
+          - user-service
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        run: |
+          SERVICE_PATH=apps/${{ matrix.service }}
+          IMAGE_NAME=vpereira007/${{ matrix.service }}
+          docker build -t $IMAGE_NAME:latest $SERVICE_PATH
+          docker push $IMAGE_NAME:latest
