@@ -50,7 +50,7 @@ Aqui está um **arquivo em Markdown** listando todas as tarefas requisitadas no 
 * [x] Implementar **Arquitetura Limpa** (pode ser variação mais simples)
 * [x] Todo o projeto deve rodar via **docker-compose**
 
-  * [ ] Imagens disponíveis no Docker Hub ou equivalente
+  * [x] Imagens disponíveis no Docker Hub ou equivalente
 * [x] Utilizar **Flyway** para migração de banco de dados
 * [x] Cobertura de testes de **pelo menos 80%** (aferida via Jacoco)
 * [x] Utilizar **última versão do Spring e Java**

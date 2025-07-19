@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/payments")
@@ -19,7 +20,7 @@ public class PaymentController {
     private final ProcessPaymentUseCase processPaymentUseCase;
 
     @PostMapping
-    public ResponseEntity<PaymentResponse> processPayment(@RequestBody PaymentRequest request) {
+    public ResponseEntity<PaymentResponse> processPayment(@Valid @RequestBody PaymentRequest request) {
         var payment = processPaymentUseCase.execute(request.toDomain());
         return new ResponseEntity<>(new PaymentResponse(payment), HttpStatus.OK);
     }

@@ -13,7 +13,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class WebhookSimulator {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
 
     @Async
     public void simulateWebhook(String transactionId, Long orderId) {

@@ -4,6 +4,7 @@ import challenge.tech.domain.UserAuth;
 import challenge.tech.enums.UserRole;
 import challenge.tech.gateway.database.jpa.UserAuthJpaGateway;
 import challenge.tech.services.JwtTokenService;
+import challenge.tech.client.UserClient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
 
 class RegisterUseCaseTest {
     @Mock
@@ -28,6 +30,8 @@ class RegisterUseCaseTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private JwtTokenService jwtTokenService;
+    @Mock
+    private UserClient userClient;
     @InjectMocks
     private RegisterUseCase registerUseCase;
     private AutoCloseable closeable;
@@ -57,6 +61,7 @@ class RegisterUseCaseTest {
             return entity;
         });
         when(jwtTokenService.generateToken(any())).thenReturn("token123");
+        doNothing().when(userClient).createUser(any());
 
         UserAuth result = registerUseCase.execute(user);
 

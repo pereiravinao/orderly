@@ -3,13 +3,16 @@ package challenge.tech.dto;
 import challenge.tech.domain.Payment;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
 public class PaymentRequest {
+    @NotNull
     private Long orderId;
+    @NotNull
     private BigDecimal amount;
     private String cardNumber;
 
