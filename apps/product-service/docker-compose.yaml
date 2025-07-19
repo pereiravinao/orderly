@@ -16,11 +16,7 @@ services:
       - minha-rede-compartilhada
 
   product-service:
-    build:
-      context: ../..
-      dockerfile: apps/product-service/Dockerfile
-      args:
-        SERVICE_PATH: apps/product-service
+    image: vpereira007/product-service:latest
     container_name: product_service
     ports:
       - "8082:8082"

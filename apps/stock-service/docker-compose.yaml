@@ -16,11 +16,7 @@ services:
       - minha-rede-compartilhada
 
   stock-service:
-    build:
-      context: ../..
-      dockerfile: apps/stock-service/Dockerfile
-      args:
-        SERVICE_PATH: apps/stock-service
+    image: vpereira007/stock-service:latest
     container_name: stock_service
     ports:
       - "8083:8083"

@@ -16,11 +16,7 @@ services:
       - minha-rede-compartilhada
 
   order-service:
-    build:
-      context: ../..
-      dockerfile: apps/order-service/Dockerfile
-      args:
-        SERVICE_PATH: apps/order-service
+    image: vpereira007/order-service:latest
     container_name: order_service
     ports:
       - "8084:8084"

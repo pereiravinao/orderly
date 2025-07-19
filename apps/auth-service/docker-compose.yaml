@@ -16,11 +16,7 @@ services:
       - minha-rede-compartilhada
 
   auth-service:
-    build:
-      context: ../..                # <-- Contexto é a raiz do monorepo
-      dockerfile: apps/auth-service/Dockerfile
-      args:
-        SERVICE_PATH: apps/auth-service
+    image: vpereira007/auth-service:latest
     container_name: auth_service
     ports:
       - "8080:8080"
