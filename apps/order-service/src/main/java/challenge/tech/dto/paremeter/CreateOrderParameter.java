@@ -3,12 +3,16 @@ package challenge.tech.dto.paremeter;
 import challenge.tech.domain.Order;
 import challenge.tech.domain.orderItem.OrderItem;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateOrderParameter {
 
     @NotNull
