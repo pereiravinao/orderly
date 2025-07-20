@@ -13,15 +13,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OrderReceiverProducer {
     private final RabbitTemplate rabbitTemplate;
+    private final ObjectMapper objectMapper;
 
     @Value("${application.queue.order-receiver}")
     private String orderReceiverQueue;
 
     public void sendOrder(OrderReceiverDTO orderReceiver) {
-        ObjectMapper mapper = new ObjectMapper();
         String orderJson = null;
         try {
-            orderJson = mapper.writeValueAsString(orderReceiver);
+            orderJson = objectMapper.writeValueAsString(orderReceiver);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
