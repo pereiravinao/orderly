@@ -25,7 +25,7 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String SKU;
+    private String sku;
     private BigDecimal price;
     private LocalDateTime createdAt;
 
@@ -39,7 +39,7 @@ public class ProductEntity {
     public ProductEntity(Product product) {
         this.id = product.getId();
         this.name = product.getName();
-        this.SKU = product.getSKU();
+        this.sku = product.getSku();
         this.price = product.getPrice();
         this.createdAt = product.getCreatedAt();
     }
@@ -48,7 +48,7 @@ public class ProductEntity {
         Product product = new Product();
         product.setId(this.id);
         product.setName(this.name);
-        product.setSKU(this.SKU);
+        product.setSku(this.sku);
         product.setPrice(this.price);
         product.setCreatedAt(this.createdAt);
         return product;

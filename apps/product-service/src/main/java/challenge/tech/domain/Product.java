@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class Product {
     private Long id;
     private String name;
-    private String SKU;
+    private String sku;
     private BigDecimal price;
     private LocalDateTime createdAt;
 
@@ -23,6 +23,9 @@ public class Product {
         }
         if (product.getPrice() != null) {
             this.price = product.getPrice();
+        }
+        if (product.getSku() != null) {
+            this.sku = product.getSku();
         }
     }
 }

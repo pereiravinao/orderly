@@ -4,10 +4,12 @@ import challenge.tech.domain.Product;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
+import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Getter
+@AllArgsConstructor
 public class CreateProductParameter {
 
     @NotNull(message = "Nome é obrigatório.")
@@ -23,7 +25,7 @@ public class CreateProductParameter {
     public Product toDomain() {
         Product product = new Product();
         product.setName(name);
-        product.setSKU(sku);
+        product.setSku(sku);
         product.setPrice(price);
         return product;
     }

@@ -2,6 +2,7 @@ package challenge.tech.controller;
 
 import challenge.tech.domain.Product;
 import challenge.tech.dto.paremeter.CreateProductParameter;
+import challenge.tech.dto.paremeter.UpdateProductParameter;
 import challenge.tech.usecase.CreateUseCase;
 import challenge.tech.usecase.DeleteUseCase;
 import challenge.tech.usecase.FindAllUseCase;
@@ -64,8 +65,8 @@ public class ProductController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product parameter) {
-        var product = updateUseCase.execute(id, parameter);
+    public ResponseEntity<Product> update(@PathVariable Long id, @Valid @RequestBody UpdateProductParameter parameter) {
+        var product = updateUseCase.execute(id, parameter.toDomain());
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 

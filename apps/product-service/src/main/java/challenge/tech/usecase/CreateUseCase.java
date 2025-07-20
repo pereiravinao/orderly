@@ -12,7 +12,7 @@ public class CreateUseCase {
     private final ProductJpaGateway productJpaGateway;
 
     public Product execute(Product product) {
-        if (productJpaGateway.existsBySKU(product.getSKU())) {
+        if (productJpaGateway.existsBySku(product.getSku())) {
             throw ProductExceptionHandler.productAlreadyExists();
         }
 

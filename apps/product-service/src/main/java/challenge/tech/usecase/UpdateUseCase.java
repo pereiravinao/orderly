@@ -13,6 +13,9 @@ public class UpdateUseCase {
     public Product execute(Long id, Product parameter) {
         var existingProduct = productJpaGateway.findById(id);
 
+        if (existingProduct == null) {
+            return null;
+        }
         existingProduct.update(parameter);
 
         return productJpaGateway.save(existingProduct);

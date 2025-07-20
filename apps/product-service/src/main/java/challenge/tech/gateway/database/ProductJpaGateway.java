@@ -37,12 +37,12 @@ public class ProductJpaGateway {
         productRepository.deleteById(id);
     }
 
-    public boolean existsBySKU(String SKU) {
-        return productRepository.existsBySKU(SKU);
+    public boolean existsBySku(String sku) {
+        return productRepository.existsBySku(sku);
     }
 
     public Product findBySku(String sku) {
-        return productRepository.findBySKU(sku)
+        return productRepository.findBySku(sku)
                 .map(ProductEntity::toDomain)
                 .orElseThrow(ProductExceptionHandler::productNotFound);
     }
