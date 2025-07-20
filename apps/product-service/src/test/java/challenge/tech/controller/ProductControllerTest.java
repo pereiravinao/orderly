@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 class ProductControllerTest {
 
-    @Mock
+@Mock
     private FindAllUseCase findAllUseCase;
     @Mock
     private FindByIdUseCase findByIdUseCase;
