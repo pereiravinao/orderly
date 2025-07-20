@@ -2,19 +2,17 @@ package challenge.tech.controller;
 
 import challenge.tech.dto.webhook.PaymentWebhookRequest;
 import challenge.tech.enums.PaymentStatus;
+import challenge.tech.services.JwtTokenService;
 import challenge.tech.usecase.UpdateOrderStatusFromWebhookUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import challenge.tech.services.JwtTokenService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -32,9 +30,9 @@ class PaymentWebhookControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private UpdateOrderStatusFromWebhookUseCase updateOrderStatusFromWebhookUseCase;
-    @MockBean
+    @MockitoBean
     private JwtTokenService jwtTokenService;
 
     @Test
