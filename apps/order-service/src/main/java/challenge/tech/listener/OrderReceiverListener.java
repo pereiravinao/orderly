@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 public class OrderReceiverListener {
 
     private final ProcessOrderUseCase processOrderUseCase;
+    private final ObjectMapper objectMapper;
 
     @RabbitListener(queues = "order-receiver-queue")
     public void orderReceiver(String message) {
-        ObjectMapper mapper = new ObjectMapper();
         try {
-            var orderReceiver = mapper.readValue(message, OrderReceiverDTO.class);
+            var orderReceiver = objectMapper.readValue(message, OrderReceiverDTO.class);
             processOrderUseCase.execute(orderReceiver);
         } catch (Exception e) {
             e.printStackTrace();
