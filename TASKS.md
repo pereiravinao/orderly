@@ -68,18 +68,18 @@ Aqui está um **arquivo em Markdown** listando todas as tarefas requisitadas no 
 ## Entregáveis
 
 * [ ] **Vídeo** explicando o código, arquitetura e mostrando sistema funcionando e testes via Postman (5–8 minutos)
-* [ ] Projeto **publicado no GitHub** (cada microsserviço em seu repositório)
-* [ ] **Relatório do Jacoco** mostrando a cobertura de testes
+* [x] Projeto **publicado no GitHub** (cada microsserviço em seu repositório)
+* [x] **Relatório do Jacoco** mostrando a cobertura de testes
 * [x] Arquivo **docker-compose** funcional, rodando o projeto inteiro
 
-  * [ ] Pode estar em repositório próprio (exemplo: repo `infra`)
+* [x] Pode estar em repositório próprio (exemplo: repo `infra`)
 
 ---
 
 ## Observações Finais
 
-* [ ] Validar sempre todos os requisitos funcionais e técnicos antes de concluir a entrega.
-* [ ] O sistema deve ser facilmente testável e extensível, seguindo boas práticas de arquitetura.
+* [x] Validar sempre todos os requisitos funcionais e técnicos antes de concluir a entrega.
+* [x] O sistema deve ser facilmente testável e extensível, seguindo boas práticas de arquitetura.
 
 ---
 
