@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaymentEntity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">payment-service</a> &gt; <a href="index.source.html" class="el_package">challenge.tech.gateway.database.jpa.entity</a> &gt; <span class="el_source">PaymentEntity.java</span></div><h1>PaymentEntity.java</h1><pre class="source lang-java linenums">package challenge.tech.gateway.database.jpa.entity;
+
+import challenge.tech.domain.Payment;
+import challenge.tech.domain.PaymentStatus;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;tb_payment&quot;)
+@Getter
+<span class="fc" id="L23">@Setter</span>
+<span class="fc" id="L24">@NoArgsConstructor</span>
+public class PaymentEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="fc" id="L28">    private Long id;</span>
+<span class="fc" id="L29">    private Long orderId;</span>
+<span class="fc" id="L30">    private String transactionId;</span>
+<span class="fc" id="L31">    private BigDecimal amount;</span>
+<span class="fc" id="L32">    private String cardNumber;</span>
+
+
+    @Enumerated(EnumType.STRING)
+<span class="fc" id="L36">    private PaymentStatus status;</span>
+<span class="fc" id="L37">    private LocalDateTime createdAt;</span>
+
+<span class="fc" id="L39">    public PaymentEntity(Payment payment) {</span>
+<span class="fc" id="L40">        this.id = payment.getId();</span>
+<span class="fc" id="L41">        this.orderId = payment.getOrderId();</span>
+<span class="fc" id="L42">        this.transactionId = payment.getTransactionId();</span>
+<span class="fc" id="L43">        this.amount = payment.getAmount();</span>
+<span class="fc" id="L44">        this.status = payment.getStatus();</span>
+<span class="fc" id="L45">        this.cardNumber = payment.getCardNumber();</span>
+<span class="fc" id="L46">        this.createdAt = payment.getCreatedAt();</span>
+<span class="fc" id="L47">    }</span>
+
+    public Payment toDomain() {
+<span class="fc" id="L50">        Payment payment = new Payment();</span>
+<span class="fc" id="L51">        payment.setId(id);</span>
+<span class="fc" id="L52">        payment.setOrderId(orderId);</span>
+<span class="fc" id="L53">        payment.setTransactionId(transactionId);</span>
+<span class="fc" id="L54">        payment.setAmount(amount);</span>
+<span class="fc" id="L55">        payment.setStatus(status);</span>
+<span class="fc" id="L56">        payment.setCardNumber(cardNumber);</span>
+<span class="fc" id="L57">        payment.setCreatedAt(createdAt);</span>
+<span class="fc" id="L58">        return payment;</span>
+    }
+
+    @PrePersist
+    public void prePersist() {
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (createdAt == null) {</span>
+<span class="fc" id="L64">            createdAt = LocalDateTime.now();</span>
+        }
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (status == null) {</span>
+<span class="fc" id="L67">            status = PaymentStatus.PENDING;</span>
+        }
+<span class="fc" id="L69">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

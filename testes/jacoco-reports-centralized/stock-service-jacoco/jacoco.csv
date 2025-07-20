@@ -1,0 +1,15 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+stock-service,challenge.tech.usecase,UpdateUseCase,0,41,0,2,0,7,0,3,0,2
+stock-service,challenge.tech.usecase,DeleteUseCase,0,11,0,0,0,3,0,2,0,2
+stock-service,challenge.tech.usecase,CreateUseCase,0,36,0,0,0,6,0,3,0,3
+stock-service,challenge.tech.usecase,FindAllUseCase,0,11,0,0,0,4,0,2,0,2
+stock-service,challenge.tech.usecase,FindByProductsIdUseCase,0,14,0,0,0,3,0,2,0,2
+stock-service,challenge.tech.gateway.database.jpa.entity,StockEntity,0,79,0,2,0,21,0,13,0,12
+stock-service,challenge.tech.controller,StockController,0,76,0,0,0,11,0,6,0,6
+stock-service,challenge.tech.service,ProductValidationService,12,0,0,0,3,0,2,0,2,0
+stock-service,challenge.tech.gateway.database,StockJpaGateway,0,45,0,0,0,10,0,6,0,6
+stock-service,challenge.tech.dto.parameter,CreateStockParameter,0,29,0,0,0,7,0,4,0,4
+stock-service,challenge.tech.dto.parameter,UpdateStockParameter,0,17,0,0,0,4,0,5,0,5
+stock-service,challenge.tech.client.dto,ProductDto,31,0,0,0,6,0,9,0,9,0
+stock-service,challenge.tech.domain,Stock,0,53,0,4,0,12,0,13,0,11
+stock-service,challenge.tech,StockServiceApplication,8,0,0,0,3,0,2,0,2,0

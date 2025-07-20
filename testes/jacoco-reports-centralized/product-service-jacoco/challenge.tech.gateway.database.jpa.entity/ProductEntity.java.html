@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductEntity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">product-service</a> &gt; <a href="index.source.html" class="el_package">challenge.tech.gateway.database.jpa.entity</a> &gt; <span class="el_source">ProductEntity.java</span></div><h1>ProductEntity.java</h1><pre class="source lang-java linenums">package challenge.tech.gateway.database.jpa.entity;
+
+
+import challenge.tech.domain.Product;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;tb_product&quot;)
+@Getter
+<span class="fc" id="L21">@Setter</span>
+<span class="fc" id="L22">@NoArgsConstructor</span>
+public class ProductEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="fc" id="L26">    private Long id;</span>
+<span class="fc" id="L27">    private String name;</span>
+<span class="fc" id="L28">    private String sku;</span>
+<span class="fc" id="L29">    private BigDecimal price;</span>
+<span class="fc" id="L30">    private LocalDateTime createdAt;</span>
+
+    @PrePersist
+    public void prePersist() {
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (this.createdAt == null) {</span>
+<span class="fc" id="L35">            this.createdAt = LocalDateTime.now();</span>
+        }
+<span class="fc" id="L37">    }</span>
+
+<span class="fc" id="L39">    public ProductEntity(Product product) {</span>
+<span class="fc" id="L40">        this.id = product.getId();</span>
+<span class="fc" id="L41">        this.name = product.getName();</span>
+<span class="fc" id="L42">        this.sku = product.getSku();</span>
+<span class="fc" id="L43">        this.price = product.getPrice();</span>
+<span class="fc" id="L44">        this.createdAt = product.getCreatedAt();</span>
+<span class="fc" id="L45">    }</span>
+
+    public Product toDomain() {
+<span class="fc" id="L48">        Product product = new Product();</span>
+<span class="fc" id="L49">        product.setId(this.id);</span>
+<span class="fc" id="L50">        product.setName(this.name);</span>
+<span class="fc" id="L51">        product.setSku(this.sku);</span>
+<span class="fc" id="L52">        product.setPrice(this.price);</span>
+<span class="fc" id="L53">        product.setCreatedAt(this.createdAt);</span>
+<span class="fc" id="L54">        return product;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

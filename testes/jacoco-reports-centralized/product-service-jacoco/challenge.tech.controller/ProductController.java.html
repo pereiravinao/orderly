@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">product-service</a> &gt; <a href="index.source.html" class="el_package">challenge.tech.controller</a> &gt; <span class="el_source">ProductController.java</span></div><h1>ProductController.java</h1><pre class="source lang-java linenums">package challenge.tech.controller;
+
+import challenge.tech.domain.Product;
+import challenge.tech.dto.paremeter.CreateProductParameter;
+import challenge.tech.dto.paremeter.UpdateProductParameter;
+import challenge.tech.usecase.CreateUseCase;
+import challenge.tech.usecase.DeleteUseCase;
+import challenge.tech.usecase.FindAllUseCase;
+import challenge.tech.usecase.FindByIdUseCase;
+import challenge.tech.usecase.FindBySkuUseCase;
+import challenge.tech.usecase.UpdateUseCase;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping(&quot;/v1/products&quot;)
+<span class="fc" id="L31">@RequiredArgsConstructor</span>
+public class ProductController {
+
+    private final FindAllUseCase findAllUseCase;
+    private final FindByIdUseCase findByIdUseCase;
+    private final FindBySkuUseCase findBySkuUseCase;
+    private final CreateUseCase createUseCase;
+    private final UpdateUseCase updateUseCase;
+    private final DeleteUseCase deleteUseCase;
+
+    @GetMapping
+    public ResponseEntity&lt;Page&lt;Product&gt;&gt; findAllUsers(@PageableDefault Pageable pageable) {
+<span class="fc" id="L43">        var products = findAllUseCase.execute(pageable);</span>
+<span class="fc" id="L44">        return new ResponseEntity&lt;&gt;(products, HttpStatus.OK);</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Product&gt; findById(@PathVariable Long id) {
+<span class="fc" id="L49">        var product = findByIdUseCase.execute(id);</span>
+<span class="fc" id="L50">        return new ResponseEntity&lt;&gt;(product, HttpStatus.OK);</span>
+    }
+
+    @GetMapping(&quot;/sku/{sku}&quot;)
+    public ResponseEntity&lt;Product&gt; findBySku(@PathVariable String sku) {
+<span class="fc" id="L55">        var product = findBySkuUseCase.execute(sku);</span>
+<span class="fc" id="L56">        return new ResponseEntity&lt;&gt;(product, HttpStatus.OK);</span>
+    }
+
+    @PostMapping
+    @PreAuthorize(&quot;hasAuthority('ADMIN')&quot;)
+    public ResponseEntity&lt;Product&gt; create(@Valid @RequestBody CreateProductParameter parameter) {
+<span class="fc" id="L62">        var product = createUseCase.execute(parameter.toDomain());</span>
+<span class="fc" id="L63">        return new ResponseEntity&lt;&gt;(product, HttpStatus.CREATED);</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    @PreAuthorize(&quot;hasAuthority('ADMIN')&quot;)
+    public ResponseEntity&lt;Product&gt; update(@PathVariable Long id, @Valid @RequestBody UpdateProductParameter parameter) {
+<span class="fc" id="L69">        var product = updateUseCase.execute(id, parameter.toDomain());</span>
+<span class="fc" id="L70">        return new ResponseEntity&lt;&gt;(product, HttpStatus.OK);</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    @PreAuthorize(&quot;hasAuthority('ADMIN')&quot;)
+    public ResponseEntity&lt;Void&gt; delete(@PathVariable Long id) {
+<span class="fc" id="L76">        deleteUseCase.execute(id);</span>
+<span class="fc" id="L77">        return new ResponseEntity&lt;&gt;(HttpStatus.NO_CONTENT);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

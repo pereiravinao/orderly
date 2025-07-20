@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CreateOrderParameter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">order-service</a> &gt; <a href="index.source.html" class="el_package">challenge.tech.dto.paremeter</a> &gt; <span class="el_source">CreateOrderParameter.java</span></div><h1>CreateOrderParameter.java</h1><pre class="source lang-java linenums">package challenge.tech.dto.paremeter;
+
+import challenge.tech.domain.Order;
+import challenge.tech.domain.orderItem.OrderItem;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Getter
+<span class="fc" id="L14">@AllArgsConstructor</span>
+<span class="fc" id="L15">@NoArgsConstructor</span>
+public class CreateOrderParameter {
+
+    @NotNull
+<span class="fc" id="L19">    private List&lt;OrderItemParameter&gt; products;</span>
+
+    @NotNull
+<span class="fc" id="L22">    private Long paymentId;</span>
+
+    public Order toDomain() {
+<span class="fc" id="L25">        Order order = new Order();</span>
+<span class="fc" id="L26">        order.setProducts(products.stream().map(item -&gt; {</span>
+<span class="fc" id="L27">            OrderItem orderItem = new OrderItem();</span>
+<span class="fc" id="L28">            orderItem.setProductId(item.getProductId());</span>
+<span class="fc" id="L29">            orderItem.setQuantity(item.getQuantity());</span>
+<span class="fc" id="L30">            return orderItem;</span>
+<span class="fc" id="L31">        }).collect(Collectors.toList()));</span>
+<span class="fc" id="L32">        order.setPaymentId(paymentId);</span>
+<span class="fc" id="L33">        return order;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

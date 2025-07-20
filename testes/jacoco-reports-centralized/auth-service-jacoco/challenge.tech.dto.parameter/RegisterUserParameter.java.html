@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegisterUserParameter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">auth-service</a> &gt; <a href="index.source.html" class="el_package">challenge.tech.dto.parameter</a> &gt; <span class="el_source">RegisterUserParameter.java</span></div><h1>RegisterUserParameter.java</h1><pre class="source lang-java linenums">package challenge.tech.dto.parameter;
+
+import challenge.tech.domain.UserAuth;
+import challenge.tech.enums.UserRole;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+import java.util.Set;
+
+@Getter
+<span class="fc" id="L14">@AllArgsConstructor</span>
+public class RegisterUserParameter {
+    @NotEmpty(message = &quot;Nome é obrigatório&quot;)
+<span class="nc" id="L17">    private String name;</span>
+
+    @NotEmpty(message = &quot;Telefone é obrigatório&quot;)
+<span class="nc" id="L20">    private String phone;</span>
+
+    @NotEmpty(message = &quot;E-mail é obrigatório&quot;)
+    @Email(message = &quot;E-mail inválido&quot;)
+<span class="fc" id="L24">    private String email;</span>
+
+    @NotEmpty(message = &quot;Senha é obrigatória&quot;)
+    @Size(min = 6, max = 16, message = &quot;Senha deve ter entre 6 e 16 caracteres&quot;)
+<span class="fc" id="L28">    private String password;</span>
+
+    @NotEmpty(message = &quot;CPF é obrigatório&quot;)
+    @Size(min = 11, max = 11, message = &quot;CPF deve ter 11 dígitos&quot;)
+<span class="fc" id="L32">    private String cpf;</span>
+
+    public UserAuth toDomain() {
+<span class="fc" id="L35">        return UserAuth.builder()</span>
+<span class="fc" id="L36">                .name(name)</span>
+<span class="fc" id="L37">                .phone(phone)</span>
+<span class="fc" id="L38">                .email(email)</span>
+<span class="fc" id="L39">                .password(password)</span>
+<span class="fc" id="L40">                .cpf(cpf)</span>
+<span class="fc" id="L41">                .roles(Set.of(UserRole.USER))</span>
+<span class="fc" id="L42">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

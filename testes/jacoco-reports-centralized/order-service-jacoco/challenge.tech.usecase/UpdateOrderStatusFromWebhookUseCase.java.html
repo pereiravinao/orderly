@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UpdateOrderStatusFromWebhookUseCase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">order-service</a> &gt; <a href="index.source.html" class="el_package">challenge.tech.usecase</a> &gt; <span class="el_source">UpdateOrderStatusFromWebhookUseCase.java</span></div><h1>UpdateOrderStatusFromWebhookUseCase.java</h1><pre class="source lang-java linenums">package challenge.tech.usecase;
+
+import challenge.tech.client.StockServiceFeignClient;
+import challenge.tech.client.dto.UpdateStockParameter;
+import challenge.tech.domain.Order;
+import challenge.tech.enums.OrderStatus;
+import challenge.tech.enums.PaymentStatus;
+import challenge.tech.gateway.database.OrderJpaGateway;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+<span class="fc" id="L13">@RequiredArgsConstructor</span>
+public class UpdateOrderStatusFromWebhookUseCase {
+
+    private final OrderJpaGateway orderJpaGateway;
+    private final StockServiceFeignClient stockServiceFeignClient;
+
+    public void execute(Long orderId, PaymentStatus paymentStatus) {
+<span class="fc" id="L20">        Order order = orderJpaGateway.findById(orderId);</span>
+
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        if (order == null) {</span>
+<span class="fc" id="L23">            return;</span>
+        }
+
+<span class="fc" id="L26">        var orderStatus = mapPaymentStatusToOrderStatus(paymentStatus);</span>
+
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (orderStatus.equals(OrderStatus.FECHADO_COM_SUCESSO)) {</span>
+<span class="fc" id="L29">            order.setStatus(OrderStatus.FECHADO_COM_SUCESSO);</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        } else if (orderStatus.equals(OrderStatus.FECHADO_SEM_CREDITO)) {</span>
+<span class="fc" id="L31">            order.setStatus(OrderStatus.FECHADO_SEM_CREDITO);</span>
+<span class="fc" id="L32">            incrementStock(order);</span>
+        }
+<span class="fc" id="L34">        orderJpaGateway.save(order);</span>
+<span class="fc" id="L35">    }</span>
+
+    private void incrementStock(Order order) {
+<span class="fc" id="L38">        order.getProducts().forEach(item -&gt; {</span>
+<span class="fc" id="L39">            UpdateStockParameter updateStockParameter = new UpdateStockParameter();</span>
+<span class="fc" id="L40">            updateStockParameter.setProductId(item.getProductId());</span>
+<span class="fc" id="L41">            updateStockParameter.setQuantity(item.getQuantity());</span>
+<span class="fc" id="L42">            stockServiceFeignClient.update(stockServiceFeignClient.findByProductId(item.getProductId()).getId(), updateStockParameter);</span>
+<span class="fc" id="L43">        });</span>
+<span class="fc" id="L44">    }</span>
+
+    private OrderStatus mapPaymentStatusToOrderStatus(PaymentStatus paymentStatus) {
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (paymentStatus.equals(PaymentStatus.SUCCESS)) {</span>
+<span class="fc" id="L48">            return OrderStatus.FECHADO_COM_SUCESSO;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        } else if (paymentStatus.equals(PaymentStatus.FAILED)) {</span>
+<span class="fc" id="L50">            return OrderStatus.FECHADO_SEM_CREDITO;</span>
+        } else {
+<span class="fc" id="L52">            return OrderStatus.AGUARDANDO_PAGAMENTO;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

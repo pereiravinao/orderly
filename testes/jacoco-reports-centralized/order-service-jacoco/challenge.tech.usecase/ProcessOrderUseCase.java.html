@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProcessOrderUseCase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">order-service</a> &gt; <a href="index.source.html" class="el_package">challenge.tech.usecase</a> &gt; <span class="el_source">ProcessOrderUseCase.java</span></div><h1>ProcessOrderUseCase.java</h1><pre class="source lang-java linenums">package challenge.tech.usecase;
+
+import challenge.tech.client.PaymentServiceFeignClient;
+import challenge.tech.client.ProductServiceFeignClient;
+import challenge.tech.client.StockServiceFeignClient;
+import challenge.tech.client.dto.PaymentRequest;
+import challenge.tech.client.dto.PaymentResponse;
+import challenge.tech.client.dto.UpdateStockParameter;
+import challenge.tech.domain.Order;
+import challenge.tech.domain.orderItem.OrderItem;
+import challenge.tech.dto.OrderReceiverDTO;
+import challenge.tech.enums.OrderStatus;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+@Component
+<span class="fc" id="L21">@RequiredArgsConstructor</span>
+public class ProcessOrderUseCase {
+
+    private final CreateUseCase createUseCase;
+    private final ProductServiceFeignClient productServiceFeignClient;
+    private final StockServiceFeignClient stockServiceFeignClient;
+    private final PaymentServiceFeignClient paymentServiceFeignClient;
+
+    public void execute(OrderReceiverDTO orderReceiverDTO) {
+<span class="fc" id="L30">        Order order = new Order();</span>
+<span class="fc" id="L31">        order.setUserId(orderReceiverDTO.getUser().getId());</span>
+
+<span class="fc" id="L33">        List&lt;OrderItem&gt; orderItems = validateAndBuildOrderItems(orderReceiverDTO);</span>
+<span class="fc" id="L34">        order.setProducts(orderItems);</span>
+
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (!checkStock(order)) {</span>
+<span class="fc" id="L37">            order.setStatus(OrderStatus.FECHADO_SEM_ESTOQUE);</span>
+<span class="fc" id="L38">            order.setTotal(BigDecimal.ZERO);</span>
+<span class="fc" id="L39">            createUseCase.execute(order);</span>
+<span class="fc" id="L40">            return;</span>
+        }
+
+<span class="fc" id="L43">        decrementStock(order);</span>
+
+<span class="fc" id="L45">        order.setTotal(calculateTotal(order));</span>
+<span class="fc" id="L46">        order.setStatus(OrderStatus.AGUARDANDO_PAGAMENTO);</span>
+<span class="fc" id="L47">        Order savedOrder = createUseCase.execute(order);</span>
+
+<span class="fc" id="L49">        PaymentResponse paymentResponse = createPayment(savedOrder, orderReceiverDTO.getPayment().getCardNumber());</span>
+<span class="fc" id="L50">        savedOrder.setPaymentId(paymentResponse.getId());</span>
+
+<span class="fc" id="L52">        createUseCase.execute(savedOrder);</span>
+<span class="fc" id="L53">    }</span>
+
+    private List&lt;OrderItem&gt; validateAndBuildOrderItems(OrderReceiverDTO orderReceiverDTO) {
+<span class="fc" id="L56">        List&lt;OrderItem&gt; items = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L57">        orderReceiverDTO.getItems().forEach(item -&gt; {</span>
+<span class="fc" id="L58">            var product = productServiceFeignClient.findBySku(item.getSku());</span>
+<span class="fc" id="L59">            items.add(new OrderItem(product.getId(), item.getQuantity()));</span>
+<span class="fc" id="L60">        });</span>
+<span class="fc" id="L61">        return items;</span>
+    }
+
+    private boolean checkStock(Order order) {
+<span class="fc" id="L65">        return order.getProducts().stream().allMatch(item -&gt; {</span>
+<span class="fc" id="L66">            var stock = stockServiceFeignClient.findByProductId(item.getProductId());</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            return stock.getQuantity() &gt;= item.getQuantity();</span>
+        });
+    }
+
+    private void decrementStock(Order order) {
+<span class="fc" id="L72">        order.getProducts().forEach(item -&gt; {</span>
+<span class="fc" id="L73">            var stock = stockServiceFeignClient.findByProductId(item.getProductId());</span>
+<span class="fc" id="L74">            UpdateStockParameter updateStockParameter = new UpdateStockParameter();</span>
+<span class="fc" id="L75">            updateStockParameter.setProductId(item.getProductId());</span>
+<span class="fc" id="L76">            updateStockParameter.setQuantity(-item.getQuantity());</span>
+<span class="fc" id="L77">            stockServiceFeignClient.update(stock.getId(), updateStockParameter);</span>
+<span class="fc" id="L78">        });</span>
+<span class="fc" id="L79">    }</span>
+
+    private void incrementStock(Order order) {
+<span class="nc" id="L82">        order.getProducts().forEach(item -&gt; {</span>
+<span class="nc" id="L83">            var stock = stockServiceFeignClient.findByProductId(item.getProductId());</span>
+<span class="nc" id="L84">            UpdateStockParameter updateStockParameter = new UpdateStockParameter();</span>
+<span class="nc" id="L85">            updateStockParameter.setProductId(item.getProductId());</span>
+<span class="nc" id="L86">            updateStockParameter.setQuantity(item.getQuantity()); // Positive quantity to revert</span>
+<span class="nc" id="L87">            stockServiceFeignClient.update(stock.getId(), updateStockParameter);</span>
+<span class="nc" id="L88">        });</span>
+<span class="nc" id="L89">    }</span>
+
+    private BigDecimal calculateTotal(Order order) {
+<span class="fc" id="L92">        return order.getProducts().stream()</span>
+<span class="fc" id="L93">                .map(item -&gt; {</span>
+<span class="fc" id="L94">                    var productData = productServiceFeignClient.findById(item.getProductId());</span>
+<span class="fc" id="L95">                    return productData.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));</span>
+                })
+<span class="fc" id="L97">                .reduce(BigDecimal.ZERO, BigDecimal::add);</span>
+    }
+
+    private PaymentResponse createPayment(Order order, String cardNumber) {
+<span class="fc" id="L101">        PaymentRequest paymentRequest = new PaymentRequest();</span>
+<span class="fc" id="L102">        paymentRequest.setAmount(order.getTotal());</span>
+<span class="fc" id="L103">        paymentRequest.setCardNumber(cardNumber);</span>
+<span class="fc" id="L104">        paymentRequest.setOrderId(order.getId());</span>
+<span class="fc" id="L105">        return paymentServiceFeignClient.processPayment(paymentRequest);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

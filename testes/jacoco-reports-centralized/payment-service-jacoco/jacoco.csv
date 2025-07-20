@@ -1,0 +1,16 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+payment-service,challenge.tech.controller,WebhookController,0,18,0,0,0,3,0,2,0,2
+payment-service,challenge.tech.controller,PaymentController,0,21,0,0,0,3,0,2,0,2
+payment-service,challenge.tech.gateway.database.jpa.entity,PaymentEntity,0,130,0,4,0,32,0,20,0,18
+payment-service,challenge.tech.usecase,UpdatePaymentStatusUseCase,0,28,0,2,0,7,0,3,0,2
+payment-service,challenge.tech.usecase,ProcessPaymentUseCase,0,39,0,0,0,7,0,2,0,2
+payment-service,challenge.tech.gateway.database,PaymentJpaGateway,0,26,0,0,0,3,0,3,0,3
+payment-service,challenge.tech.dto,PaymentResponse,27,25,0,0,3,8,5,4,5,4
+payment-service,challenge.tech.dto,PaymentRequest,0,42,0,0,0,10,0,8,0,8
+payment-service,challenge.tech.dto,WebhookRequest,0,24,0,0,0,5,0,7,0,7
+payment-service,challenge.tech.gateway.payment.impl,MockPaymentGateway,0,14,0,0,0,5,0,2,0,2
+payment-service,challenge.tech.gateway.payment.impl,WebhookSimulator,3,39,0,2,2,9,0,3,0,2
+payment-service,challenge.tech.exceptions,GlobalExceptionHandler,0,48,0,0,0,9,0,4,0,4
+payment-service,challenge.tech.domain,PaymentStatus,0,21,0,0,0,4,0,1,0,1
+payment-service,challenge.tech.domain,Payment,0,52,0,0,0,9,0,15,0,15
+payment-service,challenge.tech,PaymentServiceApplication,5,7,0,0,2,2,1,2,1,2

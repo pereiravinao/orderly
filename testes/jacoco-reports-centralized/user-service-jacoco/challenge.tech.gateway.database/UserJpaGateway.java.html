@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserJpaGateway.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">user-service</a> &gt; <a href="index.source.html" class="el_package">challenge.tech.gateway.database</a> &gt; <span class="el_source">UserJpaGateway.java</span></div><h1>UserJpaGateway.java</h1><pre class="source lang-java linenums">package challenge.tech.gateway.database;
+
+import challenge.tech.domain.User;
+import challenge.tech.exceptions.user.UserExceptionHandler;
+import challenge.tech.gateway.database.jpa.entity.UserEntity;
+import challenge.tech.gateway.database.jpa.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
+
+@Component
+public class UserJpaGateway {
+
+    private final UserRepository userRepository;
+
+    @Autowired
+<span class="fc" id="L18">    public UserJpaGateway(UserRepository userRepository) {</span>
+<span class="fc" id="L19">        this.userRepository = userRepository;</span>
+<span class="fc" id="L20">    }</span>
+
+    public Page&lt;User&gt; findAll(Pageable pageable) {
+<span class="fc" id="L23">        return userRepository.findAll(pageable).map(UserEntity::toDomain);</span>
+    }
+
+    public User findById(Long id) {
+<span class="fc" id="L27">        return userRepository.findById(id)</span>
+<span class="fc" id="L28">                .map(UserEntity::toDomain)</span>
+<span class="fc" id="L29">                .orElseThrow(UserExceptionHandler::userNotFound);</span>
+    }
+
+    public User save(User user) {
+<span class="fc" id="L33">        return userRepository.save(new UserEntity(user)).toDomain();</span>
+    }
+
+    public void deleteById(Long id) {
+<span class="fc" id="L37">        userRepository.deleteById(id);</span>
+<span class="fc" id="L38">    }</span>
+
+    public boolean existsByEmailOrCpf(String email, String cpf) {
+<span class="fc" id="L41">        return userRepository.existsByEmailOrCpf(email, cpf);</span>
+    }
+
+    public User findByAuthId(Long authId) {
+<span class="fc" id="L45">        return userRepository.findByAuthId(authId)</span>
+<span class="fc" id="L46">                .map(UserEntity::toDomain)</span>
+<span class="fc" id="L47">                .orElseThrow(UserExceptionHandler::userNotFound);</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
