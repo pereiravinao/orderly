@@ -37,7 +37,6 @@ jobs:
         run: |
           SERVICE_PATH=apps/${{ matrix.service }}
           IMAGE_NAME=vpereira007/${{ matrix.service }}
-          mvn clean install -f $SERVICE_PATH/pom.xml
           docker build -t $IMAGE_NAME:latest -f $SERVICE_PATH/Dockerfile .
           docker push $IMAGE_NAME:latest
 
