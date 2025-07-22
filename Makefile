@@ -1,28 +1,82 @@
-# Caminho dos docker-compose.yaml de cada microserviço
-COMPOSE_AUTH=apps/auth-service/docker-compose.yaml
-COMPOSE_USER=apps/user-service/docker-compose.yaml
-COMPOSE_PRODUCT=apps/product-service/docker-compose.yaml
-COMPOSE_STOCK=apps/stock-service/docker-compose.yaml
-COMPOSE_ORDER=apps/order-service/docker-compose.yaml
-COMPOSE_PAYMENT=apps/payment-service/docker-compose.yaml
-COMPOSE_ORDER_RECEIVER=apps/order-receiver-producer/docker-compose.yaml
+# Makefile para gerenciar aplicação com múltiplos microsserviços Docker
+# Este arquivo foi projetado para ser multiplataforma (Windows/Linux/macOS).
 
-COMPOSE_FILES = $(COMPOSE_AUTH) $(COMPOSE_USER) $(COMPOSE_PRODUCT) $(COMPOSE_STOCK) $(COMPOSE_ORDER) $(COMPOSE_PAYMENT) $(COMPOSE_ORDER_RECEIVER)
+# NOTA PARA USUÁRIOS WINDOWS:
+# Se os caracteres com acentos (🚀, 🛠️) aparecerem quebrados no seu terminal (PowerShell/CMD),
+# pode ser um problema de codificação. Salvar este arquivo como "UTF-8" pode resolver.
+# Alternativamente, executar 'chcp 65001' no terminal antes de 'make' pode ajudar.
 
+# --- Configuração ---
+
+# Nome do projeto. Usado para agrupar todos os contêineres e evitar conflitos.
+PROJECT_NAME = orderly
+
+# Para mudar para o comando moderno 'docker compose' (com espaço), altere esta variável.
+# DOCKER_COMPOSE = docker compose
+DOCKER_COMPOSE = docker-compose
+
+# Lista de todos os arquivos docker-compose.yaml dos microsserviços.
+# Usamos barras normais (/) para garantir a compatibilidade entre sistemas.
+COMPOSE_LIST = \
+    ./apps/auth-service/docker-compose.yaml \
+    ./apps/user-service/docker-compose.yaml \
+    ./apps/product-service/docker-compose.yaml \
+    ./apps/stock-service/docker-compose.yaml \
+    ./apps/order-service/docker-compose.yaml \
+    ./apps/payment-service/docker-compose.yaml \
+    ./apps/order-receiver-producer/docker-compose.yaml
+
+# Gera automaticamente as flags -f para cada arquivo da lista.
+# Exemplo: -f ./apps/auth-service/docker-compose.yaml -f ./apps/user-service/docker-compose.yaml ...
+COMPOSE_FILES = $(addprefix -f ,$(COMPOSE_LIST))
+
+# --- Comandos Principais ---
+
+# Comando padrão (executado se você apenas digitar 'make')
+all: up
+
+# Inicia todos os serviços em modo detached (em segundo plano).
 up:
-	docker compose -f $(COMPOSE_FILES) up -d
+	@echo "🚀 Iniciando todos os serviços para o projeto '$(PROJECT_NAME)'..."
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) $(COMPOSE_FILES) up -d
 
+# Constrói (ou reconstrói) as imagens e inicia todos os serviços.
 build:
-	docker compose -f $(COMPOSE_FILES) up -d --build
+	@echo "🛠️  Construindo imagens e iniciando todos os serviços para o projeto '$(PROJECT_NAME)'..."
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) $(COMPOSE_FILES) up -d --build
 
+# Para e remove todos os contêineres, volumes e redes do projeto.
 clean:
-	docker compose -f $(COMPOSE_FILES) down --volumes --remove-orphans
+	@echo "🧹 Parando e limpando todos os contêineres, volumes e redes do projeto '$(PROJECT_NAME)'..."
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) $(COMPOSE_FILES) down --volumes --remove-orphans
 
+# Apenas para todos os serviços do projeto.
 down:
-	docker compose -f $(COMPOSE_FILES) down
+	@echo "🛑 Parando todos os serviços do projeto '$(PROJECT_NAME)'..."
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) $(COMPOSE_FILES) down
 
+# Lista os contêineres em execução do projeto.
 ps:
-	docker compose -f $(COMPOSE_FILES) ps
+	@echo "📋 Listando contêineres do projeto '$(PROJECT_NAME)'..."
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) $(COMPOSE_FILES) ps
 
+# Exibe os logs de todos os serviços do projeto.
 logs:
-	docker compose -f $(COMPOSE_FILES) logs
+	@echo "📜 Exibindo logs do projeto '$(PROJECT_NAME)'... (Pressione Ctrl+C para sair)"
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) $(COMPOSE_FILES) logs -f
+
+# --- Metas Auxiliares ---
+
+# Declara que os alvos não são arquivos, evitando conflitos.
+.PHONY: all up build clean down ps logs help
+
+# Exibe uma mensagem de ajuda com os comandos disponíveis.
+help:
+	@echo "Comandos disponíveis:"
+	@echo "  make up      - Inicia todos os serviços em segundo plano."
+	@echo "  make build   - Reconstrói as imagens e inicia os serviços."
+	@echo "  make down    - Para todos os serviços."
+	@echo "  make clean   - Para e remove contêineres, volumes e redes."
+	@echo "  make ps      - Lista os contêineres em execução."
+	@echo "  make logs    - Exibe os logs de todos os serviços."
+

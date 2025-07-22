@@ -21,7 +21,7 @@ services:
     ports:
       - "8084:8084"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db_order-service:5433/db_order_service
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db_order-service:5432/db_order_service
       SPRING_DATASOURCE_USERNAME: postgres_user
       SPRING_DATASOURCE_PASSWORD: postgres_password
     depends_on:
