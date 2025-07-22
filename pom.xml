@@ -32,6 +32,7 @@
     <modules>
         <module>apps</module>
         <module>commons</module>
+        <module>apps/order-receiver-producer</module>
     </modules>
 
     <!-- Gerenciamento de dependências -->
