@@ -21,7 +21,7 @@ services:
     ports:
       - "8085:8085"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db_payment-service:5473/db_payment_service
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db_payment-service:5432/db_payment_service
       SPRING_DATASOURCE_USERNAME: postgres_user
       SPRING_DATASOURCE_PASSWORD: postgres_password
     depends_on:
