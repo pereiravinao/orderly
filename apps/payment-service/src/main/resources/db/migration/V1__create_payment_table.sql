@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS tb_payment
 (
-    id             BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id             BIGINT PRIMARY KEY AUTO_INCREMENT,
     order_id       VARCHAR(255)   NOT NULL,
     transaction_id VARCHAR(255)   NOT NULL UNIQUE,
     amount         DECIMAL(10, 2) NOT NULL,

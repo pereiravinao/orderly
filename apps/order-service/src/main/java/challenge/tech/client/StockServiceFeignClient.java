@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "stock-service", url = "${stock-service.url}", configuration = FeignConfig.class)
+@FeignClient(name = "stock-service", url = "${clients.stock-service.url}", configuration = FeignConfig.class)
 public interface StockServiceFeignClient {
 
     @GetMapping("/v1/stocks/products/{productId}")

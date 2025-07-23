@@ -1,24 +1,27 @@
 package challenge.tech.controller;
 
-import challenge.tech.domain.PaymentStatus;
-import challenge.tech.dto.WebhookRequest;
-import challenge.tech.usecase.UpdatePaymentStatusUseCase;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import challenge.tech.domain.PaymentStatus;
+import challenge.tech.dto.WebhookRequest;
+import challenge.tech.services.JwtTokenService;
+import challenge.tech.usecase.UpdatePaymentStatusUseCase;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class WebhookControllerTest {
@@ -28,7 +31,7 @@ class WebhookControllerTest {
 
     @MockitoBean
     private UpdatePaymentStatusUseCase updatePaymentStatusUseCase;
-    
+
     @MockitoBean
     private JwtTokenService jwtTokenService;
 
@@ -76,7 +79,8 @@ class WebhookControllerTest {
         request.setTransactionId("12345");
         request.setStatus(PaymentStatus.SUCCESS);
 
-        doThrow(new RuntimeException("Simulated internal error")).when(updatePaymentStatusUseCase).execute(anyString(), any(PaymentStatus.class));
+        doThrow(new RuntimeException("Simulated internal error")).when(updatePaymentStatusUseCase).execute(anyString(),
+                any(PaymentStatus.class));
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

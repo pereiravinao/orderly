@@ -65,18 +65,35 @@ logs:
 	@echo "📜 Exibindo logs do projeto '$(PROJECT_NAME)'... (Pressione Ctrl+C para sair)"
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) $(COMPOSE_FILES) logs -f
 
+# --- Comandos de Teste ---
+
+# Executa todos os testes com cobertura JaCoCo e gera relatórios centralizados.
+test-coverage:
+	@echo "🧪 Executando testes com cobertura JaCoCo para todos os serviços..."
+	@echo "📊 Gerando relatórios de cobertura..."
+	mvn clean test jacoco:report jacoco:report-aggregate
+	@echo "✅ Testes concluídos! Relatórios disponíveis em: ./testes/jacoco-reports-centralized/"
+
+# Executa apenas os testes sem gerar relatórios de cobertura.
+test:
+	@echo "🧪 Executando testes para todos os serviços..."
+	mvn test
+	@echo "✅ Testes concluídos!"
+
 # --- Metas Auxiliares ---
 
 # Declara que os alvos não são arquivos, evitando conflitos.
-.PHONY: all up build clean down ps logs help
+.PHONY: all up build clean down ps logs test test-coverage help
 
 # Exibe uma mensagem de ajuda com os comandos disponíveis.
 help:
 	@echo "Comandos disponíveis:"
-	@echo "  make up      - Inicia todos os serviços em segundo plano."
-	@echo "  make build   - Reconstrói as imagens e inicia os serviços."
-	@echo "  make down    - Para todos os serviços."
-	@echo "  make clean   - Para e remove contêineres, volumes e redes."
-	@echo "  make ps      - Lista os contêineres em execução."
-	@echo "  make logs    - Exibe os logs de todos os serviços."
+	@echo "  make up            - Inicia todos os serviços em segundo plano."
+	@echo "  make build         - Reconstrói as imagens e inicia os serviços."
+	@echo "  make down          - Para todos os serviços."
+	@echo "  make clean         - Para e remove contêineres, volumes e redes."
+	@echo "  make ps            - Lista os contêineres em execução."
+	@echo "  make logs          - Exibe os logs de todos os serviços."
+	@echo "  make test          - Executa todos os testes."
+	@echo "  make test-coverage - Executa testes com cobertura JaCoCo."
 
