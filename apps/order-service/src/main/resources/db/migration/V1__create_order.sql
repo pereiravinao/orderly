@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS tb_order
 (
-    id         INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id         INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_id    INTEGER        NOT NULL,
     payment_id INTEGER,
     products   JSONB,
