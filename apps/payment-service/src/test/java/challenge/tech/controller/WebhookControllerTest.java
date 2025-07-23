@@ -28,6 +28,9 @@ class WebhookControllerTest {
 
     @MockitoBean
     private UpdatePaymentStatusUseCase updatePaymentStatusUseCase;
+    
+    @MockitoBean
+    private JwtTokenService jwtTokenService;
 
     @Autowired
     private ObjectMapper objectMapper;
