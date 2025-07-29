@@ -55,7 +55,6 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         deleteUseCase.execute(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

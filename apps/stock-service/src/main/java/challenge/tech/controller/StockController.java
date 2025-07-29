@@ -49,21 +49,18 @@ public class StockController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Stock> create(@Valid @RequestBody CreateStockParameter parameter) {
         var stock = createUseCase.execute(parameter.toDomain());
         return new ResponseEntity<>(stock, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ROLE_INTERNAL_SERVICE')")
     public ResponseEntity<Stock> update(@PathVariable Long id, @RequestBody UpdateStockParameter parameter) {
         var stock = updateUseCase.execute(id, parameter.getProductId(), parameter.getQuantity());
         return new ResponseEntity<>(stock, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         deleteUseCase.execute(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

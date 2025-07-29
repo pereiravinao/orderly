@@ -57,21 +57,18 @@ public class ProductController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Product> create(@Valid @RequestBody CreateProductParameter parameter) {
         var product = createUseCase.execute(parameter.toDomain());
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Product> update(@PathVariable Long id, @Valid @RequestBody UpdateProductParameter parameter) {
         var product = updateUseCase.execute(id, parameter.toDomain());
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         deleteUseCase.execute(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
