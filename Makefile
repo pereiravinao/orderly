@@ -18,6 +18,7 @@ DOCKER_COMPOSE = docker-compose
 # Lista de todos os arquivos docker-compose.yaml dos microsserviços.
 # Usamos barras normais (/) para garantir a compatibilidade entre sistemas.
 COMPOSE_LIST = \
+    ./docker-compose.shared.yaml \
     ./apps/auth-service/docker-compose.yaml \
     ./apps/user-service/docker-compose.yaml \
     ./apps/product-service/docker-compose.yaml \

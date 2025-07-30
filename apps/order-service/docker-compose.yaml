@@ -21,17 +21,13 @@ services:
     ports:
       - "8084:8084"
     environment:
-      # Conexão com PostgreSQL (já existe)
       SPRING_DATASOURCE_URL: jdbc:postgresql://db_order-service:5432/db_order_service
       SPRING_DATASOURCE_USERNAME: postgres_user
       SPRING_DATASOURCE_PASSWORD: postgres_password
-
-      # ✅ NOVA CONFIGURAÇÃO: RabbitMQ para o listener
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: guest
       SPRING_RABBITMQ_PASSWORD: guest
-
     depends_on:
       - db_order-service
     networks:
