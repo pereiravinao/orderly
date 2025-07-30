@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OrderReceiverListener {
 
     private final ProcessOrderUseCase processOrderUseCase;
@@ -19,6 +20,7 @@ public class OrderReceiverListener {
     public void orderReceiver(String message) {
         try {
             var orderReceiver = objectMapper.readValue(message, OrderReceiverDTO.class);
+            log.info("Received order: {}", orderReceiver);
             processOrderUseCase.execute(orderReceiver);
         } catch (Exception e) {
             e.printStackTrace();
