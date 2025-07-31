@@ -13,6 +13,8 @@ import org.springframework.web.client.RestTemplate;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.test.util.ReflectionTestUtils;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,8 +26,13 @@ class WebhookSimulatorTest {
     @InjectMocks
     private WebhookSimulator webhookSimulator;
 
+    @BeforeEach
+    void setUp() {
+        ReflectionTestUtils.setField(webhookSimulator, "orderServiceUrl", "http://test-url");
+    }
+
     @Test
-    void shouldSimulateWebhook() {
+    void shouldSimulateWebhook() throws InterruptedException {
         String transactionId = "12345";
         Long orderId = 1L;
 
@@ -33,6 +40,8 @@ class WebhookSimulatorTest {
                 .thenReturn(ResponseEntity.ok().build());
 
         webhookSimulator.simulateWebhook(transactionId, orderId);
+
+        Thread.sleep(2000);
 
         verify(restTemplate).postForEntity(anyString(), any(WebhookRequest.class), any(Class.class));
     }

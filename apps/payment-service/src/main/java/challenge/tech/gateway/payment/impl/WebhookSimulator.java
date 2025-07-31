@@ -22,20 +22,15 @@ public class WebhookSimulator {
     @Async
     public void simulateWebhook(String transactionId, Long orderId) {
         try {
-            new Thread(() -> {
-                try {
-                    Thread.sleep(1000);
-                    WebhookRequest webhookRequest = new WebhookRequest();
-                    webhookRequest.setTransactionId(transactionId);
-                    webhookRequest.setOrderId(orderId);
-                    webhookRequest.setStatus(new Random().nextBoolean() ? PaymentStatus.SUCCESS : PaymentStatus.FAILED);
+            Thread.sleep(1000);
+            WebhookRequest webhookRequest = new WebhookRequest();
+            webhookRequest.setTransactionId(transactionId);
+            webhookRequest.setOrderId(orderId);
+            webhookRequest.setStatus(new Random().nextBoolean() ? PaymentStatus.SUCCESS : PaymentStatus.FAILED);
 
-                    restTemplate.postForEntity(orderServiceUrl, webhookRequest, Void.class);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }).start();
-
+            restTemplate.postForEntity(orderServiceUrl, webhookRequest, Void.class);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
