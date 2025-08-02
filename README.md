@@ -199,4 +199,5 @@ Após o processamento, o pedido poderá assumir um dos seguintes status finais:
 
 
 ### Fluxo Visual
-![Flowchart.jpg](../Downloads/Flowchart.jpg)
+
+![Flowchart.png](/home/carolinesilvanolasco/Downloads/Flowchart.png)
