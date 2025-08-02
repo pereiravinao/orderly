@@ -136,8 +136,67 @@ cd apps/<nome-do-servico>
 mvn clean install jacoco:report
 ```
 
+## Testes e Cobertura de Código
+
+Para executar os testes com geração de relatório de cobertura de código, utilize o comando:
+
+```bash
+make test-coverage
+```
+
 ### Relatórios de Cobertura Centralizados
 
 Após executar os testes com JaCoCo para cada microsserviço, você pode visualizar um relatório mestre que centraliza os links para todos os relatórios individuais. Este relatório é gerado automaticamente na raiz do projeto:
 
 Abra o arquivo `target/jacoco-reports-centralized/index.html` no seu navegador.
+
+
+## Fluxo de Processamento de Pedidos
+
+Este documento descreve o fluxo de processamento de pedidos no sistema **Orderly**, desde a criação até a conclusão do pedido.
+
+### 1. Criação e Enfileiramento do Pedido
+
+- **Cliente envia um pedido:**  
+  O cliente realiza uma solicitação de pedido, informando:
+  - SKU(s) dos produtos desejados
+  - Quantidade de cada item
+  - Identificador do cliente
+  - Dados de pagamento (como número do cartão de crédito)
+
+- **Recebimento do pedido:**  
+  O serviço `order-receiver-producer` recebe a solicitação e a prepara para o processamento.
+
+- **Envio para a fila:**  
+  O pedido é enviado para a fila do **RabbitMQ** com o status inicial: `ABERTO`.
+
+---
+
+### 2. Processamento do Pedido
+
+O serviço `order-service` consome os pedidos da fila e executa os seguintes passos:
+
+- **Verificação de estoque:**  
+  O `order-service` comunica-se com o `stock-service` via **Feign Client** para verificar a disponibilidade dos itens solicitados.
+
+- **Processamento de pagamento:**  
+  O pagamento é processado por meio do `payment-service`.
+
+---
+
+### 3. Conclusão do Pedido
+
+Após o processamento, o pedido poderá assumir um dos seguintes status finais:
+
+- `FECHADO_COM_SUCESSO`:  
+  Estoque disponível e pagamento aprovado.
+
+- `FECHADO_SEM_ESTOQUE`:  
+  Estoque insuficiente. Se o pagamento já tiver sido processado, é realizado o estorno.
+
+- `FECHADO_SEM_CREDITO`:  
+  Pagamento recusado por falta de crédito. O estoque é restituído.
+
+
+### Fluxo Visual
+![Flowchart.jpg](../Downloads/Flowchart.jpg)
