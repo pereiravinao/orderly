@@ -153,22 +153,22 @@ Abra o arquivo `target/jacoco-reports-centralized/index.html` no seu navegador.
 
 ## Fluxo de Processamento de Pedidos
 
-Este documento descreve o fluxo de processamento de pedidos no sistema **Orderly**, desde a criação até a conclusão do pedido.
+Este fluxo descreve como os pedidos são processados no sistema **Orderly**, desde o recebimento até a conclusão.
 
 ### 1. Criação e Enfileiramento do Pedido
 
 - **Cliente envia um pedido:**  
   O cliente realiza uma solicitação de pedido, informando:
-  - SKU(s) dos produtos desejados
-  - Quantidade de cada item
-  - Identificador do cliente
+  - SKU(s) dos produtos desejados  
+  - Quantidade de cada item  
+  - Identificador do cliente  
   - Dados de pagamento (como número do cartão de crédito)
 
 - **Recebimento do pedido:**  
   O serviço `order-receiver-producer` recebe a solicitação e a prepara para o processamento.
 
 - **Envio para a fila:**  
-  O pedido é enviado para a fila do **RabbitMQ** com o status inicial: `ABERTO`.
+  O pedido é enviado para a fila do **RabbitMQ** com o status inicial `ABERTO`.
 
 ---
 
@@ -176,11 +176,14 @@ Este documento descreve o fluxo de processamento de pedidos no sistema **Orderly
 
 O serviço `order-service` consome os pedidos da fila e executa os seguintes passos:
 
+- **Validação do produto:**  
+  O `order-service` verifica se os produtos informados existem no sistema e obtém seus respectivos IDs com base no SKU.
+
 - **Verificação de estoque:**  
-  O `order-service` comunica-se com o `stock-service` via **Feign Client** para verificar a disponibilidade dos itens solicitados.
+  Com os IDs dos produtos, o `order-service` consulta o `stock-service` via **Feign Client** para validar a disponibilidade em estoque.
 
 - **Processamento de pagamento:**  
-  O pagamento é processado por meio do `payment-service`.
+  O pagamento é processado por meio do `payment-service` (simulado por um mock para fins didáticos).
 
 ---
 
