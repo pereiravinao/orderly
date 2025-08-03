@@ -200,4 +200,4 @@ Após o processamento, o pedido poderá assumir um dos seguintes status finais:
 
 ### Fluxo Visual
 
-![Flowchart.png](Flowchart.png)
+![Fluxograma.jpg](Fluxograma.jpg)
