@@ -151,51 +151,100 @@ Após executar os testes com JaCoCo para cada microsserviço, você pode visuali
 Abra o arquivo `target/jacoco-reports-centralized/index.html` no seu navegador.
 
 
-## Fluxo de Processamento de Pedidos
+# Fluxo de Processamento de Pedidos — Sistema Orderly
 
-Este documento descreve o fluxo de processamento de pedidos no sistema **Orderly**, desde a criação até a conclusão do pedido.
-
-### 1. Criação e Enfileiramento do Pedido
-
-- **Cliente envia um pedido:**  
-  O cliente realiza uma solicitação de pedido, informando:
-  - SKU(s) dos produtos desejados
-  - Quantidade de cada item
-  - Identificador do cliente
-  - Dados de pagamento (como número do cartão de crédito)
-
-- **Recebimento do pedido:**  
-  O serviço `order-receiver-producer` recebe a solicitação e a prepara para o processamento.
-
-- **Envio para a fila:**  
-  O pedido é enviado para a fila do **RabbitMQ** com o status inicial: `ABERTO`.
+Este documento descreve detalhadamente o fluxo completo pelo qual um pedido percorre dentro do sistema Orderly, desde o momento em que o cliente realiza a solicitação até a conclusão final, envolvendo todos os microsserviços relacionados.
 
 ---
 
-### 2. Processamento do Pedido
+## 1. Criação e Enfileiramento do Pedido
 
-O serviço `order-service` consome os pedidos da fila e executa os seguintes passos:
+### 1.1. Solicitação do Pedido pelo Cliente
 
-- **Verificação de estoque:**  
-  O `order-service` comunica-se com o `stock-service` via **Feign Client** para verificar a disponibilidade dos itens solicitados.
+O cliente realiza uma requisição para o sistema contendo:
 
-- **Processamento de pagamento:**  
-  O pagamento é processado por meio do `payment-service`.
+- SKU(s) dos produtos desejados  
+- Quantidade de cada item  
+- Identificador do cliente (user ID)  
+- Dados para pagamento (ex: cartão de crédito, boleto, etc)
+
+### 1.2. Recebimento pelo serviço **order-receiver-producer**
+
+- O serviço **order-receiver-producer** (também chamado order-receiver-service) recebe a requisição de pedido via API REST.  
+- O pedido é validado superficialmente para garantir que possui os dados mínimos.  
+- O pedido recebe status inicial **ABERTO** (ou PENDING) para indicar que está aguardando processamento.  
+- O pedido é então publicado em uma fila do **RabbitMQ** para processamento assíncrono.
 
 ---
 
-### 3. Conclusão do Pedido
+## 2. Processamento do Pedido pelo serviço **order-service**
 
-Após o processamento, o pedido poderá assumir um dos seguintes status finais:
+O **order-service** é responsável por consumir os pedidos da fila e orquestrar o processamento completo, seguindo estes passos:
 
-- `FECHADO_COM_SUCESSO`:  
-  Estoque disponível e pagamento aprovado.
+### 2.1. Validação e Enriquecimento dos Produtos
 
-- `FECHADO_SEM_ESTOQUE`:  
-  Estoque insuficiente. Se o pagamento já tiver sido processado, é realizado o estorno.
+- O **order-service** consulta o **product-service** para validar se os SKUs enviados existem no sistema e obter os IDs dos produtos.  
+- Essa etapa garante que os produtos solicitados estão ativos e válidos para venda.
 
-- `FECHADO_SEM_CREDITO`:  
-  Pagamento recusado por falta de crédito. O estoque é restituído.
+### 2.2. Verificação de Estoque (stock-service)
+
+- Com os IDs dos produtos em mãos, o **order-service** chama o **stock-service** para verificar a disponibilidade de estoque de cada item do pedido.  
+- O estoque deve ser suficiente para atender a quantidade solicitada.  
+- Caso algum item não tenha estoque disponível ou a quantidade seja insuficiente, o **order-service** interrompe o processamento normal e:  
+  - Se o pagamento ainda não foi processado, o pedido é finalizado com o status **FECHADO_SEM_ESTOQUE**, indicando que não foi possível atender o pedido por falta de estoque.  
+  - Se o pagamento já tiver sido processado antes da confirmação do estoque, o valor é estornado para o cliente, e o pedido é marcado também como **FECHADO_SEM_ESTOQUE**.  
+- O cliente pode então ser notificado para ajustar o pedido ou tentar novamente posteriormente.
+
+### 2.3. Processamento do Pagamento (payment-service)
+
+- Se o estoque estiver disponível, o **order-service** encaminha os dados de pagamento para o **payment-service**.  
+- O pagamento pode ser simulado (mock) ou processado em ambiente real.  
+- O resultado do pagamento (aprovado, recusado, pendente) é retornado ao **order-service**.  
+- Se o pagamento for recusado, o pedido é finalizado com o status **FECHADO_SEM_CREDITO** e, se o estoque já estiver reservado, ele é restituído para evitar inconsistências.  
+- O cliente é notificado para corrigir a forma de pagamento.
+
+---
+
+## 3. Estados Finais e Tratamento de Resultados
+
+Após as etapas de estoque e pagamento, o pedido recebe um dos seguintes status finais:
+
+### 3.1. FECHADO_COM_SUCESSO
+
+- Estoque confirmado disponível.  
+- Pagamento aprovado.  
+- O pedido é finalizado com sucesso.  
+- O estoque é atualizado para descontar os itens vendidos.  
+- Notificações de confirmação podem ser enviadas ao cliente.
+
+### 3.2. FECHADO_SEM_ESTOQUE
+
+- Estoque insuficiente para algum dos produtos.  
+- Caso o pagamento tenha sido processado antes da confirmação do estoque, é realizado o estorno do valor.  
+- O pedido é finalizado com o status indicando falta de estoque.  
+- O cliente pode ser informado para ajustar ou cancelar o pedido.
+
+### 3.3. FECHADO_SEM_CREDITO
+
+- Pagamento recusado (ex: falta de crédito ou dados inválidos).  
+- Caso o estoque já tenha sido reservado, ele é restituído para evitar inconsistências.  
+- O pedido recebe status indicando falha no pagamento.  
+- O cliente deve ser notificado para corrigir a forma de pagamento.
+
+---
+
+## 4. Integração e Comunicação entre Microsserviços
+
+- A comunicação entre os serviços é feita por:  
+
+  - **RabbitMQ**: fila de mensagens usada para desacoplar o recebimento do pedido do processamento (order-receiver → order-service).  
+
+  - **REST (Feign Client)**: para chamadas síncronas entre:  
+    - order-service ↔ product-service  
+    - order-service ↔ stock-service  
+    - order-service ↔ payment-service  
+
+- Outros serviços auxiliares como **user-service** e **auth-service** podem ser consultados para validações de usuário e autenticação, garantindo segurança e integridade.
 
 
 ### Fluxo Visual
